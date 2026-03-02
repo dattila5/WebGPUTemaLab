@@ -7,30 +7,30 @@ import vertexShaderCode from './shaders/vertex.wgsl?raw';
 import fragmentShaderCode from './shaders/fragment.wgsl?raw';
 
 async function main() {
-    try {
-        const { device, context, canvasFormat } = await initWebGPU();
-        console.log('WebGPU initialized!');
+  try {
+    const { device, context, canvasFormat } = await initWebGPU();
+    console.log('WebGPU initialized!');
 
-        const pipeline = createRenderPipeline(device, canvasFormat, vertexShaderCode, fragmentShaderCode);
-        console.log('Pipeline created!');
+    const pipeline = createRenderPipeline(device, canvasFormat, vertexShaderCode, fragmentShaderCode);
+    console.log('Pipeline created!');
 
-        const positionBuffer = createPositionBuffer(device, 7);
-        const cameraBuffer = createCameraUniformBuffer(device);  // ← NEW!
-        const indexBuffer = createIndexBuffer(device);
-        const bindGroup = createPositionBindGroup(device, pipeline, positionBuffer, cameraBuffer);  // ← PASS!
+    const positionBuffer = createPositionBuffer(device, 7);
+    const cameraBuffer = createCameraUniformBuffer(device);  // ← NEW!
+    const indexBuffer = createIndexBuffer(device);
+    const bindGroup = createPositionBindGroup(device, pipeline, positionBuffer, cameraBuffer);  // ← PASS!
 
-        initKeyboardInput();
+    initKeyboardInput();
 
-        function gameLoop() {
-            renderFrame(device, context, pipeline, positionBuffer, cameraBuffer, indexBuffer, bindGroup);
-            requestAnimationFrame(gameLoop);
-        }
-
-        gameLoop();
-
-    } catch (error) {
-        console.error('Error:', error);
+    function gameLoop() {
+      renderFrame(device, context, pipeline, positionBuffer, cameraBuffer, indexBuffer, bindGroup);
+      requestAnimationFrame(gameLoop);
     }
+
+    gameLoop();
+
+  } catch (error) {
+    console.error('Error:', error);
+  }
 }
 
 main();
