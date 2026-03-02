@@ -1,4 +1,5 @@
 import { squarePosition, keysPressed } from '../input/keyboard';
+import { updatePhysics } from '../physics/gravity';  // ← ÚJ IMPORT!
 
 // Frame rajzolása
 function renderFrame(
@@ -8,22 +9,19 @@ function renderFrame(
     positionBuffer: GPUBuffer,
     bindGroup: GPUBindGroup
 ) {
-    // Pozíció frissítése
     const speed = 0.0045;
 
-    if (keysPressed.w) squarePosition.y += speed;
-    if (keysPressed.s) squarePosition.y -= speed;
     if (keysPressed.a) squarePosition.x -= speed;
     if (keysPressed.d) squarePosition.x += speed;
 
-    // Buffer frissítése
+    updatePhysics(squarePosition, keysPressed[' ']);  // ← ÚJ!
+
     device.queue.writeBuffer(
         positionBuffer,
         0,
         new Float32Array([squarePosition.x, squarePosition.y])
     );
 
-    // GPU parancsok
     const encoder = device.createCommandEncoder();
     const pass = encoder.beginRenderPass({
         colorAttachments: [

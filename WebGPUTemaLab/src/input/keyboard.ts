@@ -2,10 +2,9 @@
 let squarePosition = { x: 0.0, y: 0.0 };
 
 const keysPressed = {
-    w: false,
-    s: false,
     a: false,
     d: false,
+    ' ': false,
 };
 
 // Billentyűzet hallgatás
