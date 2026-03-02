@@ -1,4 +1,3 @@
-// GPU csatlakozás és beállítása
 async function initWebGPU() {
     if (!navigator.gpu) {
         throw Error("WebGPU not supported.");

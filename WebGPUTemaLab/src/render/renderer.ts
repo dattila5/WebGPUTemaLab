@@ -1,7 +1,16 @@
-import { squarePosition, keysPressed } from '../input/keyboard';
-import { updatePhysics } from '../physics/gravity';  // ← ÚJ IMPORT!
+import type { GameObject } from '../core/gameObject';
+import { keysPressed } from '../input/keyboard';
+import { updatePhysics } from '../physics/gravity';
+import { level1 } from '../level/level';
 
-// Frame rajzolása
+let player: GameObject = {
+    x: -0.9,
+    y: -0.7,
+    width: 0.08,
+    height: 0.08,
+    type: 'player',
+};
+
 function renderFrame(
     device: GPUDevice,
     context: GPUCanvasContext,
@@ -11,23 +20,18 @@ function renderFrame(
 ) {
     const speed = 0.0045;
 
-    if (keysPressed.a) squarePosition.x -= speed;
-    if (keysPressed.d) squarePosition.x += speed;
+    if (keysPressed['a']) player.x -= speed;
+    if (keysPressed['d']) player.x += speed;
 
-    updatePhysics(squarePosition, keysPressed[' ']);  // ← ÚJ!
+    updatePhysics(player, keysPressed[' ']);
 
-    device.queue.writeBuffer(
-        positionBuffer,
-        0,
-        new Float32Array([squarePosition.x, squarePosition.y])
-    );
-
+    // GPU rajzolás
     const encoder = device.createCommandEncoder();
     const pass = encoder.beginRenderPass({
         colorAttachments: [
             {
                 view: context.getCurrentTexture().createView(),
-                clearValue: { r: 0, g: 0, b: 0, a: 1 },
+                clearValue: { r: 0.1, g: 0.1, b: 0.1, a: 1 },
                 loadOp: 'clear',
                 storeOp: 'store',
             },
@@ -36,9 +40,9 @@ function renderFrame(
 
     pass.setPipeline(pipeline);
     pass.setBindGroup(0, bindGroup);
-    pass.draw(4);
-    pass.end();
+    pass.draw(4);  // Egy négyzet rajzolása
 
+    pass.end();
     const commandBuffer = encoder.finish();
     device.queue.submit([commandBuffer]);
 }

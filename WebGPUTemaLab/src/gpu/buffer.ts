@@ -1,26 +1,18 @@
-// Pozíció buffer létrehozása
-function createPositionBuffer(device: GPUDevice): GPUBuffer {
-    const buffer = device.createBuffer({
-        label: 'Square position buffer',
-        size: 8,
+export function createPositionBuffer(device: GPUDevice): GPUBuffer {
+    // Dummy buffer, nem használjuk egyelőre
+    return device.createBuffer({
+        size: 16,
         usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
-        mappedAtCreation: true,
     });
-
-    new Float32Array(buffer.getMappedRange()).set([0, 0]);
-    buffer.unmap();
-
-    return buffer;
 }
 
-// Bind group létrehozása
-function createPositionBindGroup(
+export function createPositionBindGroup(
     device: GPUDevice,
     pipeline: GPURenderPipeline,
     positionBuffer: GPUBuffer
 ): GPUBindGroup {
-    const bindGroup = device.createBindGroup({
-        label: 'Position bind group',
+    // Empty bind group (az 'auto' layout miatt működik)
+    return device.createBindGroup({
         layout: pipeline.getBindGroupLayout(0),
         entries: [
             {
@@ -31,8 +23,4 @@ function createPositionBindGroup(
             },
         ],
     });
-
-    return bindGroup;
 }
-
-export { createPositionBuffer, createPositionBindGroup };

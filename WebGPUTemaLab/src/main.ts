@@ -3,7 +3,6 @@ import { createRenderPipeline } from './gpu/pipeline';
 import { createPositionBuffer, createPositionBindGroup } from './gpu/buffer';
 import { initKeyboardInput } from './input/keyboard';
 import { renderFrame } from './render/renderer';
-
 import vertexShaderCode from './shaders/vertex.wgsl?raw';
 import fragmentShaderCode from './shaders/fragment.wgsl?raw';
 
