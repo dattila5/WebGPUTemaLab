@@ -1,24 +1,35 @@
-import './style.css'
-import typescriptLogo from './typescript.svg'
-import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.ts'
+import { initWebGPU } from './gpu/init';
+import { createRenderPipeline } from './gpu/pipeline';
+import { createPositionBuffer, createPositionBindGroup } from './gpu/buffer';
+import { initKeyboardInput } from './input/keyboard';
+import { renderFrame } from './render/renderer';
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://www.typescriptlang.org/" target="_blank">
-      <img src="${typescriptLogo}" class="logo vanilla" alt="TypeScript logo" />
-    </a>
-    <h1>Vite + TypeScript</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite and TypeScript logos to learn more
-    </p>
-  </div>
-`
+import vertexShaderCode from './shaders/vertex.wgsl?raw';
+import fragmentShaderCode from './shaders/fragment.wgsl?raw';
 
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
+async function main() {
+    try {
+        const { device, context, canvasFormat } = await initWebGPU();
+        console.log('WebGPU initialized!');
+
+        const pipeline = createRenderPipeline(device, canvasFormat, vertexShaderCode, fragmentShaderCode);
+        console.log('Pipeline created!');
+
+        const positionBuffer = createPositionBuffer(device);
+        const bindGroup = createPositionBindGroup(device, pipeline, positionBuffer);
+
+        initKeyboardInput();
+
+        function gameLoop() {
+            renderFrame(device, context, pipeline, positionBuffer, bindGroup);
+            requestAnimationFrame(gameLoop);
+        }
+
+        gameLoop();
+
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+main();
