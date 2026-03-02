@@ -1,87 +1,69 @@
 import type { GameObject } from '../core/gameObject';
 
-export function checkCollision(
-  obj1: GameObject,
-  obj2: GameObject
-): boolean {
+export interface BoundingBox {
+  top: number;
+  bottom: number;
+  left: number;
+  right: number;
+}
+
+export function getBoundingBox(obj: GameObject): BoundingBox {
+  return {
+    top: obj.y + obj.height / 2,
+    bottom: obj.y - obj.height / 2,
+    left: obj.x - obj.width / 2,
+    right: obj.x + obj.width / 2,
+  };
+}
+
+export function checkAABBCollision(box1: BoundingBox, box2: BoundingBox): boolean {
   return (
-    obj1.x < obj2.x + obj2.width &&
-    obj1.x + obj1.width > obj2.x &&
-    obj1.y < obj2.y + obj2.height &&
-    obj1.y + obj1.height > obj2.y
+    box1.right > box2.left &&
+    box1.left < box2.right &&
+    box1.top > box2.bottom &&
+    box1.bottom < box2.top
   );
 }
 
-function getCollisionSide(
-  player: GameObject,
-  platform: GameObject
-): 'top' | 'bottom' | 'left' | 'right' | null {
-  const overlapLeft = player.x + player.width - platform.x;
-  const overlapRight = platform.x + platform.width - player.x;
-  const overlapTop = player.y + player.height - platform.y;
-  const overlapBottom = platform.y + platform.height - player.y;
-
-  const minOverlap = Math.min(overlapLeft, overlapRight, overlapTop, overlapBottom);
-
-  if (minOverlap === overlapTop && overlapTop < overlapBottom) {
-    return 'top';
-  }
-  if (minOverlap === overlapBottom && overlapBottom < overlapTop) {
-    return 'bottom';
-  }
-  if (minOverlap === overlapLeft && overlapLeft < overlapRight) {
-    return 'left';
-  }
-  if (minOverlap === overlapRight && overlapRight < overlapLeft) {
-    return 'right';
-  }
-
-  return null;
+export function calculateOverlap(playerBox: BoundingBox, platformBox: BoundingBox) {
+  return {
+    top: playerBox.bottom - platformBox.top,
+    bottom: platformBox.bottom - playerBox.top,
+    left: playerBox.right - platformBox.left,
+    right: platformBox.right - playerBox.left,
+  };
 }
 
-export function handlePlatformCollision(
-  player: GameObject,
-  platforms: GameObject[],
-  velocity: { x: number; y: number }
-): void {
-  for (let platform of platforms) {
-    if (checkCollision(player, platform)) {
-      const side = getCollisionSide(player, platform);
+export function getCollisionSide(
+  overlap: ReturnType<typeof calculateOverlap>
+): 'top' | 'bottom' | 'left' | 'right' {
+  const minOverlap = Math.min(
+    Math.abs(overlap.top),
+    Math.abs(overlap.bottom),
+    Math.abs(overlap.left),
+    Math.abs(overlap.right)
+  );
 
-      switch (side) {
-        case 'top':
-          player.y = platform.y - player.height;
-          velocity.y = 0;
-          player.isGrounded = true;
-          break;
-
-        case 'bottom':
-          player.y = platform.y + platform.height;
-          velocity.y = 0;
-          break;
-
-        case 'left':
-          player.x = platform.x - player.width;
-          velocity.x = 0;
-          break;
-
-        case 'right':
-          player.x = platform.x + platform.width;
-          velocity.x = 0;
-          break;
-      }
-    }
-  }
+  if (minOverlap === Math.abs(overlap.top)) return 'top';
+  if (minOverlap === Math.abs(overlap.bottom)) return 'bottom';
+  if (minOverlap === Math.abs(overlap.left)) return 'left';
+  return 'right';
 }
 
-export function checkPlatformCollision(
-  player: GameObject,
-  platforms: GameObject[]
-): GameObject | null {
-  for (let platform of platforms) {
-    if (checkCollision(player, platform)) {
-      return platform;
-    }
+export function shouldResolveCollision(
+  side: string,
+  overlap: ReturnType<typeof calculateOverlap>,
+  playerVy: number
+): boolean {
+  switch (side) {
+    case 'top':
+      return overlap.top < 0 && playerVy <= 0;
+    case 'bottom':
+      return overlap.bottom < 0 && playerVy > 0;
+    case 'left':
+    case 'right':
+      return overlap[side as 'left' | 'right'] > 0;
+    default:
+      return false;
   }
-  return null;
 }

@@ -15,9 +15,9 @@ async function main() {
     console.log('Pipeline created!');
 
     const positionBuffer = createPositionBuffer(device, 7);
-    const cameraBuffer = createCameraUniformBuffer(device);  // ← NEW!
+    const cameraBuffer = createCameraUniformBuffer(device);
     const indexBuffer = createIndexBuffer(device);
-    const bindGroup = createPositionBindGroup(device, pipeline, positionBuffer, cameraBuffer);  // ← PASS!
+    const bindGroup = createPositionBindGroup(device, pipeline, positionBuffer, cameraBuffer);
 
     initKeyboardInput();
 
