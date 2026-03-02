@@ -1,6 +1,6 @@
 import { initWebGPU } from './gpu/init';
 import { createRenderPipeline } from './gpu/pipeline';
-import { createPositionBuffer, createPositionBindGroup } from './gpu/buffer';
+import { createPositionBuffer, createCameraUniformBuffer, createPositionBindGroup, createIndexBuffer } from './gpu/buffer';
 import { initKeyboardInput } from './input/keyboard';
 import { renderFrame } from './render/renderer';
 import vertexShaderCode from './shaders/vertex.wgsl?raw';
@@ -14,13 +14,15 @@ async function main() {
         const pipeline = createRenderPipeline(device, canvasFormat, vertexShaderCode, fragmentShaderCode);
         console.log('Pipeline created!');
 
-        const positionBuffer = createPositionBuffer(device);
-        const bindGroup = createPositionBindGroup(device, pipeline, positionBuffer);
+        const positionBuffer = createPositionBuffer(device, 7);
+        const cameraBuffer = createCameraUniformBuffer(device);  // ← NEW!
+        const indexBuffer = createIndexBuffer(device);
+        const bindGroup = createPositionBindGroup(device, pipeline, positionBuffer, cameraBuffer);  // ← PASS!
 
         initKeyboardInput();
 
         function gameLoop() {
-            renderFrame(device, context, pipeline, positionBuffer, bindGroup);
+            renderFrame(device, context, pipeline, positionBuffer, cameraBuffer, indexBuffer, bindGroup);
             requestAnimationFrame(gameLoop);
         }
 
