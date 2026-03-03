@@ -3,7 +3,7 @@ import { level1 } from '../level/level';
 import { getBoundingBox, checkAABBCollision, calculateOverlap, getCollisionSide, shouldResolveCollision, } from './collision';
 
 const GRAVITY = -0.0002;
-const JUMP_STRENGTH = 0.015;
+const JUMP_STRENGTH = 0.012;
 
 interface GameObjectWithVelocity extends GameObject {
   vy?: number;

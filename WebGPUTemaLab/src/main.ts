@@ -5,6 +5,7 @@ import { initKeyboardInput } from './input/keyboard';
 import { renderFrame } from './render/renderer';
 import vertexShaderCode from './shaders/vertex.wgsl?raw';
 import fragmentShaderCode from './shaders/fragment.wgsl?raw';
+import { level1 } from './level/level';
 
 async function main() {
   try {
@@ -14,7 +15,7 @@ async function main() {
     const pipeline = createRenderPipeline(device, canvasFormat, vertexShaderCode, fragmentShaderCode);
     console.log('Pipeline created!');
 
-    const positionBuffer = createPositionBuffer(device, 7);
+    const positionBuffer = createPositionBuffer(device, 1 + level1.length);
     const cameraBuffer = createCameraUniformBuffer(device);
     const indexBuffer = createIndexBuffer(device);
     const bindGroup = createPositionBindGroup(device, pipeline, positionBuffer, cameraBuffer);

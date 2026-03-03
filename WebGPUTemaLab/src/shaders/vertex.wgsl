@@ -9,6 +9,11 @@ struct CameraData {
     _pad1: f32,
 };
 
+struct VertexOutput {
+    @builtin(position) position: vec4<f32>,
+    @location(0) @interpolate(flat) instance_id: u32,
+};
+
 @group(0) @binding(0) var<storage, read> objects: array<ObjectData>;
 @group(0) @binding(1) var<uniform> camera: CameraData;
 
@@ -16,7 +21,7 @@ struct CameraData {
 fn main(
     @builtin(vertex_index) vertex_index: u32,
     @builtin(instance_index) instance_index: u32
-) -> @builtin(position) vec4<f32> {
+) -> VertexOutput {
     var pos = array<vec2<f32>, 4>(
         vec2<f32>(-0.5, -0.5),
         vec2<f32>( 0.5, -0.5),
@@ -33,5 +38,8 @@ fn main(
 
     vertex.x = vertex.x - camera.x - camera.offset;
 
-    return vec4<f32>(vertex, 0.0, 1.0);
+    return VertexOutput(
+        vec4<f32>(vertex, 0.0, 1.0),
+        instance_index
+    );
 }
