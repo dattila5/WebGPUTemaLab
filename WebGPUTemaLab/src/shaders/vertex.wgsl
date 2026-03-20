@@ -1,5 +1,6 @@
 struct ObjectData {
     position: vec4<f32>,
+    object_type: f32,
 };
 
 struct CameraData {
@@ -11,7 +12,7 @@ struct CameraData {
 
 struct VertexOutput {
     @builtin(position) position: vec4<f32>,
-    @location(0) @interpolate(flat) instance_id: u32,
+    @location(0) @interpolate(flat) object_type: u32,
 };
 
 @group(0) @binding(0) var<storage, read> objects: array<ObjectData>;
@@ -40,6 +41,6 @@ fn main(
 
     return VertexOutput(
         vec4<f32>(vertex, 0.0, 1.0),
-        instance_index
+        u32(obj.object_type)
     );
 }

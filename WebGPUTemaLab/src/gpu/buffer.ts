@@ -14,7 +14,7 @@ export function createIndexBuffer(device: GPUDevice): GPUBuffer {
 }
 
 export function createPositionBuffer(device: GPUDevice, objectCount: number): GPUBuffer {
-  const bufferSize = objectCount * 16;
+  const bufferSize = objectCount * 32;
 
   return device.createBuffer({
     size: bufferSize,
@@ -55,14 +55,24 @@ export function updateObjectBuffer(
   buffer: GPUBuffer,
   objects: GameObject[]
 ): void {
-  const data = new Float32Array(objects.length * 4);
+  const data = new Float32Array(objects.length * 8);  // 8 float per object
 
   for (let i = 0; i < objects.length; i++) {
     const obj = objects[i];
-    data[i * 4 + 0] = obj.x;
-    data[i * 4 + 1] = obj.y;
-    data[i * 4 + 2] = obj.width;
-    data[i * 4 + 3] = obj.height;
+    data[i * 8 + 0] = obj.x;
+    data[i * 8 + 1] = obj.y;
+    data[i * 8 + 2] = obj.width;
+    data[i * 8 + 3] = obj.height;
+
+    let typeCode = 0;
+    if (obj.type === 'player') typeCode = 0;
+    else if (obj.type === 'platform_grass') typeCode = 1;
+    else if (obj.type === 'platform_dirt') typeCode = 2;
+    else if (obj.type === 'platform_block') typeCode = 3;
+    else if (obj.type === 'enemy') typeCode = 4;
+    else if (obj.type === 'spike') typeCode = 5;
+
+    data[i * 8 + 4] = typeCode;
   }
 
   device.queue.writeBuffer(buffer, 0, data);
