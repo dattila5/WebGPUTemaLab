@@ -3,7 +3,7 @@ export type GameObject = {
   y: number;
   width: number;
   height: number;
-  type: 'player' | 'platform_grass' | 'platform_dirt' | 'platform_block' | 'enemy' | 'spike';
+  type: 'player' | 'platform_grass' | 'platform_dirt' | 'platform_block' | 'enemy' | 'spike' | 'flag_pole' | 'flag';
   name?: string;
   isGrounded?: boolean;
   velocityY?: number;

@@ -9,7 +9,7 @@ export const player: GameObjectWithVelocity = {
     x: -0.9,
     y: -0.35,
     width: 0.02,
-    height: 0.1,
+    height: 0.2,
     type: 'player',
     vy: 0,
     isGrounded: false,

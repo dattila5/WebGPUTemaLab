@@ -16,6 +16,7 @@ function renderFrame(
     positionBuffer: GPUBuffer,
     cameraBuffer: GPUBuffer,
     indexBuffer: GPUBuffer,
+    uvBuffer: GPUBuffer,
     bindGroup: GPUBindGroup
 ) {
     frameCount++;
@@ -53,6 +54,7 @@ function renderFrame(
     pass.setPipeline(pipeline);
     pass.setBindGroup(0, bindGroup);
     pass.setIndexBuffer(indexBuffer, 'uint32');
+    pass.setVertexBuffer(0, uvBuffer);
     pass.drawIndexed(6, allObjects.length, 0, 0, 0);
 
     pass.end();

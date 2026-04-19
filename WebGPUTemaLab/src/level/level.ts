@@ -1,19 +1,19 @@
 import type { GameObject } from '../core/gameObject';
 
 export const level1: GameObject[] = [
-  { x: -0.9, y: -0.65, width: 1.5, height: 0.1, type: 'platform_grass', name: 'start_main_grass' },
+  { x: -0.9, y: -0.65, width: 1.7, height: 0.1, type: 'platform_grass', name: 'start_main_grass' },
 
   { x: -0.9, y: -0.875, width: 1.7, height: 0.35, type: 'platform_dirt', name: 'main_dirt_1' },
 
-  { x: -0.125, y: -0.6, width: 0.05, height: 0.2, type: 'platform_grass', name: 'start_main_step_1' },
-  { x: -0.075, y: -0.55, width: 0.05, height: 0.3, type: 'platform_grass', name: 'start_main_step_2' },
+  { x: -0.1, y: -0.55, width: 0.1, height: 0.1, type: 'platform_block', name: 'start_main_step_1' },
+  { x: -0.075, y: -0.45, width: 0.05, height: 0.1, type: 'platform_block', name: 'start_main_step_2' },
 
   { x: 0.175, y: -0.3, width: 0.15, height: 0.1, type: 'platform_block', name: 'jump_between_steps_1' },
 
-  { x: 0.425, y: -0.55, width: 0.05, height: 0.3, type: 'platform_grass', name: 'main2_step_2' },
-  { x: 0.475, y: -0.6, width: 0.05, height: 0.2, type: 'platform_grass', name: 'main1_step_1' },
+  { x: 0.425, y: -0.45, width: 0.05, height: 0.1, type: 'platform_block', name: 'main2_step_2' },
+  { x: 0.45, y: -0.55, width: 0.1, height: 0.1, type: 'platform_block', name: 'main1_step_1' },
 
-  { x: 1.25, y: -0.65, width: 1.5, height: 0.1, type: 'platform_grass', name: 'main1' },
+  { x: 1.2, y: -0.65, width: 1.6, height: 0.1, type: 'platform_grass', name: 'main1' },
   { x: 1.2, y: -0.875, width: 1.6, height: 0.35, type: 'platform_dirt', name: 'main1' },
 
   { x: 0.8, y: -0.55, width: 0.05, height: 0.1, type: 'platform_block', name: 'moving_ai_box_1' },
@@ -26,6 +26,6 @@ export const level1: GameObject[] = [
   { x: 3.8, y: -0.65, width: 1.5, height: 0.1, type: 'platform_grass', name: 'main2' },
   { x: 3.8, y: -0.875, width: 1.5, height: 0.35, type: 'platform_dirt', name: 'main2' },
 
-  { x: 3.8, y: -0.45, width: 0.02, height: 0.3, type: 'platform_grass', name: 'end_flag_pole' },
-  { x: 3.8525, y: -0.3, width: 0.125, height: 0.075, type: 'platform_grass', name: 'end_flag' },
+  { x: 3.8, y: -0.45, width: 0.02, height: 0.3, type: 'flag_pole', name: 'end_flag_pole' },
+  { x: 3.8525, y: -0.3, width: 0.125, height: 0.075, type: 'flag', name: 'end_flag' },
 ];

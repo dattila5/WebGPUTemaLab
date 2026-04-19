@@ -13,6 +13,7 @@ struct CameraData {
 struct VertexOutput {
     @builtin(position) position: vec4<f32>,
     @location(0) @interpolate(flat) object_type: u32,
+    @location(1) uv: vec2<f32>,
 };
 
 @group(0) @binding(0) var<storage, read> objects: array<ObjectData>;
@@ -39,8 +40,17 @@ fn main(
 
     vertex.x = vertex.x - camera.x - camera.offset;
 
+    var uv = pos[vertex_index] + vec2<f32>(0.5);
+
+    let obj_type = u32(obj.object_type);
+    if (obj_type != 0u && obj_type != 4u && obj_type != 7u) {
+        uv.x *= obj.position.z / 0.5;
+        uv.y *= obj.position.w / 0.5;
+    }
+
     return VertexOutput(
         vec4<f32>(vertex, 0.0, 1.0),
-        u32(obj.object_type)
+        u32(obj.object_type),
+        uv
     );
 }

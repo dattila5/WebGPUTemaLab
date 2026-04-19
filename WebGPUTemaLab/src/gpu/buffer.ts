@@ -1,3 +1,5 @@
+import type { GameObject } from '../core/gameObject';
+
 export function createIndexBuffer(device: GPUDevice): GPUBuffer {
   const indices = new Uint32Array([0, 1, 2, 2, 3, 0]);
 
@@ -8,6 +10,26 @@ export function createIndexBuffer(device: GPUDevice): GPUBuffer {
   });
 
   new Uint32Array(buffer.getMappedRange()).set(indices);
+  buffer.unmap();
+
+  return buffer;
+}
+
+export function createUVBuffer(device: GPUDevice): GPUBuffer {
+  const uvCoords = new Float32Array([
+    0.0, 1.0,
+    1.0, 1.0,
+    1.0, 0.0,
+    0.0, 0.0,
+  ]);
+
+  const buffer = device.createBuffer({
+    size: uvCoords.byteLength,
+    usage: GPUBufferUsage.VERTEX | GPUBufferUsage.COPY_DST,
+    mappedAtCreation: true,
+  });
+
+  new Float32Array(buffer.getMappedRange()).set(uvCoords);
   buffer.unmap();
 
   return buffer;
@@ -34,28 +56,22 @@ export function createPositionBindGroup(
     entries: [
       {
         binding: 0,
-        resource: {
-          buffer: positionBuffer,
-        },
+        resource: { buffer: positionBuffer },
       },
       {
         binding: 1,
-        resource: {
-          buffer: cameraBuffer,
-        },
+        resource: { buffer: cameraBuffer },
       },
     ],
   });
 }
-
-import type { GameObject } from '../core/gameObject';
 
 export function updateObjectBuffer(
   device: GPUDevice,
   buffer: GPUBuffer,
   objects: GameObject[]
 ): void {
-  const data = new Float32Array(objects.length * 8);  // 8 float per object
+  const data = new Float32Array(objects.length * 8);
 
   for (let i = 0; i < objects.length; i++) {
     const obj = objects[i];
@@ -71,6 +87,8 @@ export function updateObjectBuffer(
     else if (obj.type === 'platform_block') typeCode = 3;
     else if (obj.type === 'enemy') typeCode = 4;
     else if (obj.type === 'spike') typeCode = 5;
+    else if (obj.type === 'flag_pole') typeCode = 6;
+    else if (obj.type === 'flag') typeCode = 7;
 
     data[i * 8 + 4] = typeCode;
   }
@@ -95,4 +113,3 @@ export function updateCameraUniformBuffer(
   const data = new Float32Array([cameraX, offset, 0, 0]);
   device.queue.writeBuffer(buffer, 0, data);
 }
-

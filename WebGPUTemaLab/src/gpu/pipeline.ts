@@ -12,7 +12,7 @@ export function createRenderPipeline(
     code: fragmentShaderCode,
   });
 
-  const bindGroupLayout = device.createBindGroupLayout({
+const bindGroupLayout = device.createBindGroupLayout({
     entries: [
       {
         binding: 0,
@@ -36,6 +36,18 @@ export function createRenderPipeline(
     vertex: {
       module: vertexShaderModule,
       entryPoint: 'main',
+      buffers: [
+        {
+          arrayStride: 8,
+          attributes: [
+            {
+              shaderLocation: 0,
+              offset: 0,
+              format: 'float32x2',
+            },
+          ],
+        },
+      ],
     },
     fragment: {
       module: fragmentShaderModule,
