@@ -45,11 +45,42 @@ export function createPositionBuffer(device: GPUDevice, objectCount: number): GP
   });
 }
 
+export async function loadTexture(device: GPUDevice, imagePath: string): Promise<GPUTexture> {
+  const response = await fetch(imagePath);
+  const blob = await response.blob();
+  const bitmap = await createImageBitmap(blob);
+
+  const texture = device.createTexture({
+    size: [bitmap.width, bitmap.height],
+    format: 'rgba8unorm',
+    usage: GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT,
+  });
+
+  device.queue.copyExternalImageToTexture(
+    { source: bitmap },
+    { texture: texture },
+    [bitmap.width, bitmap.height]
+  );
+
+  return texture;
+}
+
+export function createTextureSampler(device: GPUDevice): GPUSampler {
+  return device.createSampler({
+    magFilter: 'nearest',
+    minFilter: 'nearest',
+    addressModeU: 'repeat',
+    addressModeV: 'repeat',
+  });
+}
+
 export function createPositionBindGroup(
   device: GPUDevice,
   pipeline: GPURenderPipeline,
   positionBuffer: GPUBuffer,
-  cameraBuffer: GPUBuffer
+  cameraBuffer: GPUBuffer,
+  texture: GPUTexture,
+  sampler: GPUSampler
 ): GPUBindGroup {
   return device.createBindGroup({
     layout: pipeline.getBindGroupLayout(0),
@@ -61,6 +92,14 @@ export function createPositionBindGroup(
       {
         binding: 1,
         resource: { buffer: cameraBuffer },
+      },
+      {
+        binding: 2,
+        resource: texture.createView(),
+      },
+      {
+        binding: 3,
+        resource: sampler,
       },
     ],
   });
@@ -89,6 +128,7 @@ export function updateObjectBuffer(
     else if (obj.type === 'spike') typeCode = 5;
     else if (obj.type === 'flag_pole') typeCode = 6;
     else if (obj.type === 'flag') typeCode = 7;
+    else if (obj.type === 'background') typeCode = 8;
 
     data[i * 8 + 4] = typeCode;
   }

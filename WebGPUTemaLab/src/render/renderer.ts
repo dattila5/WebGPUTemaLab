@@ -4,6 +4,7 @@ import { level1 } from '../level/level';
 import { updateObjectBuffer, updateCameraUniformBuffer } from '../gpu/buffer';
 import { player, updatePlayerMovement } from '../game/player';
 import { updateCamera, smoothCameraX, smoothOffset } from '../game/camera';
+import type { GameObject } from '../core/gameObject';
 
 let frameCount = 0;
 const FIXED_TIMESTEP = 1 / 60;
@@ -35,7 +36,12 @@ function renderFrame(
         console.log(`Player: x=${player.x.toFixed(2)}, y=${player.y.toFixed(2)}, Camera: ${smoothCameraX.toFixed(2)}`);
     }
 
-    const allObjects = [player, ...level1];
+    const backgroundObject: GameObject = {
+      x: 0, y: 0, width: 10, height: 2,
+      type: 'background', name: 'bg'
+    };
+
+    const allObjects = [backgroundObject, player, ...level1];
     updateObjectBuffer(device, positionBuffer, allObjects);
     updateCameraUniformBuffer(device, cameraBuffer, smoothCameraX, smoothOffset);
 

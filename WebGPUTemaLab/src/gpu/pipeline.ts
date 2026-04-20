@@ -12,7 +12,7 @@ export function createRenderPipeline(
     code: fragmentShaderCode,
   });
 
-const bindGroupLayout = device.createBindGroupLayout({
+  const bindGroupLayout = device.createBindGroupLayout({
     entries: [
       {
         binding: 0,
@@ -23,6 +23,21 @@ const bindGroupLayout = device.createBindGroupLayout({
         binding: 1,
         visibility: GPUShaderStage.VERTEX,
         buffer: { type: 'uniform' },
+      },
+      {
+        binding: 2,
+        visibility: GPUShaderStage.FRAGMENT,
+        texture: {
+          sampleType: 'float',
+          viewDimension: '2d',
+        },
+      },
+      {
+        binding: 3,
+        visibility: GPUShaderStage.FRAGMENT,
+        sampler: {
+          type: 'filtering',
+        },
       },
     ],
   });

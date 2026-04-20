@@ -43,14 +43,15 @@ fn main(
     var uv = pos[vertex_index] + vec2<f32>(0.5);
 
     let obj_type = u32(obj.object_type);
-    if (obj_type != 0u && obj_type != 4u && obj_type != 7u) {
-        uv.x *= obj.position.z / 0.5;
-        uv.y *= obj.position.w / 0.5;
-    }
+    let u_offset = f32(obj_type) / 9.0;
+    let u_width = 1.0 / 9.0;
+
+    uv.x = u_offset + (uv.x * u_width);
+    uv.y = uv.y;
 
     return VertexOutput(
         vec4<f32>(vertex, 0.0, 1.0),
-        u32(obj.object_type),
+        obj_type,
         uv
     );
 }

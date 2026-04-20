@@ -34,6 +34,8 @@ export function updatePhysics(
   const playerBox = getBoundingBox(player);
 
   for (let platform of level1) {
+    if (platform.type === 'background') continue;
+
     const platformBox = getBoundingBox(platform);
 
     if (!checkAABBCollision(playerBox, platformBox)) continue;

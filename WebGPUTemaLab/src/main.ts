@@ -1,6 +1,6 @@
 import { initWebGPU } from './gpu/init';
 import { createRenderPipeline } from './gpu/pipeline';
-import { createPositionBuffer, createCameraUniformBuffer, createPositionBindGroup, createIndexBuffer, createUVBuffer } from './gpu/buffer';
+import { createPositionBuffer, createCameraUniformBuffer, createPositionBindGroup, createIndexBuffer, createUVBuffer, loadTexture, createTextureSampler } from './gpu/buffer';
 import { initKeyboardInput } from './input/keyboard';
 import { renderFrame } from './render/renderer';
 import vertexShaderCode from './shaders/vertex.wgsl?raw';
@@ -15,12 +15,16 @@ async function main() {
     const pipeline = createRenderPipeline(device, canvasFormat, vertexShaderCode, fragmentShaderCode);
     console.log('Pipeline created!');
 
-    const positionBuffer = createPositionBuffer(device, 1 + level1.length);
+    const texture = await loadTexture(device, '/textures/atlas.png');
+    const sampler = createTextureSampler(device);
+    console.log('Texture loaded!');
+
+    const positionBuffer = createPositionBuffer(device, 1 + 1 + level1.length);
     const cameraBuffer = createCameraUniformBuffer(device);
     const indexBuffer = createIndexBuffer(device);
     const uvBuffer = createUVBuffer(device);
 
-    const bindGroup = createPositionBindGroup(device, pipeline, positionBuffer, cameraBuffer);
+    const bindGroup = createPositionBindGroup(device, pipeline, positionBuffer, cameraBuffer, texture, sampler);
     initKeyboardInput();
 
     function gameLoop() {
