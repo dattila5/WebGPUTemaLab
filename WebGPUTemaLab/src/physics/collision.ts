@@ -61,8 +61,9 @@ export function shouldResolveCollision(
     case 'bottom':
       return overlap.bottom < 0 && playerVy > 0;
     case 'left':
+      return overlap.left > 0 && playerVy > 0;
     case 'right':
-      return overlap[side as 'left' | 'right'] > 0;
+      return overlap.right > 0 && playerVy > 0;
     default:
       return false;
   }

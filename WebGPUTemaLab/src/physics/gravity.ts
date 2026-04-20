@@ -43,7 +43,9 @@ export function updatePhysics(
     const overlap = calculateOverlap(playerBox, platformBox);
     const side = getCollisionSide(overlap);
 
-    if (!shouldResolveCollision(side, overlap, player.vy)) continue;
+    if (!shouldResolveCollision(side, overlap, player.vy)) {
+      continue;
+    }
 
     switch (side) {
       case 'top':

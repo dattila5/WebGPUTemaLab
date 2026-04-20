@@ -2,7 +2,7 @@ import { keysPressed } from '../input/keyboard';
 import { updatePhysics } from '../physics/gravity';
 import { level1 } from '../level/level';
 import { updateObjectBuffer, updateCameraUniformBuffer } from '../gpu/buffer';
-import { player, updatePlayerMovement } from '../game/player';
+import { player, updatePlayerMovement, didPlayerFallOut, isPlayerOutOfMap } from '../game/player';
 import { updateCamera, smoothCameraX, smoothOffset } from '../game/camera';
 import type { GameObject } from '../core/gameObject';
 
@@ -23,6 +23,8 @@ function renderFrame(
     frameCount++;
     accumulator += FIXED_TIMESTEP;
 
+    didPlayerFallOut();
+    isPlayerOutOfMap();
     updatePlayerMovement(keysPressed);
 
     while (accumulator >= FIXED_TIMESTEP) {

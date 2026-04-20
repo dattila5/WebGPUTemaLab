@@ -20,3 +20,23 @@ export function updatePlayerMovement(keysPressed: Record<string, boolean>): void
     if (keysPressed['a']) player.x -= speed;
     if (keysPressed['d']) player.x += speed;
 }
+
+export function didPlayerFallOut(): void{
+  if(player.y <= -1.0){
+    killPlayer();
+  }
+}
+
+export function killPlayer(): void{
+  player.x = -0.9;
+  player.y = -0.35;
+}
+
+export function isPlayerOutOfMap(): void{
+  if(player.x <= -1.04){
+    player.x = -1.04;
+  }
+  if(player.x >= 4.465){
+    player.x = 4.465;
+  }
+}

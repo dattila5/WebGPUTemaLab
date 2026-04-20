@@ -17,9 +17,9 @@ fn main(input: VertexOutput) -> @location(0) vec4<f32> {
     let u_width = 1.0 / 9.0;
 
     if (obj_type == 1u) {
-          uv.x = u_offset + fract(uv.x * 100.0) * u_width;
+          uv.x = u_offset + fract(uv.x * 200.0) * u_width;
     }else if(obj_type == 2u){
-          uv.x = u_offset + fract(uv.x * 50.0) * u_width;
+          uv.x = u_offset + fract(uv.x * 150.0) * u_width;
     }else if(obj_type == 3u){
           uv.x = u_offset + fract(uv.x * 20.0) * u_width;
     }else if(obj_type == 7u){
