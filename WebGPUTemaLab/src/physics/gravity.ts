@@ -10,6 +10,12 @@ interface GameObjectWithVelocity extends GameObject {
   isGrounded?: boolean;
 }
 
+interface Collision {
+  side: 'top' | 'bottom' | 'left' | 'right';
+  platform: GameObject;
+  overlap: ReturnType<typeof calculateOverlap>;
+}
+
 export function updatePhysics(
   player: GameObjectWithVelocity,
   isJumping: boolean
@@ -28,10 +34,13 @@ export function updatePhysics(
     player.isGrounded = false;
   }
 
+  const oldPlayerY = player.y;  // ← Mentsd el az előző y-t
   player.y += player.vy;
   player.isGrounded = false;
 
   const playerBox = getBoundingBox(player);
+
+  const collisions: Collision[] = [];
 
   for (let platform of level1) {
     if (platform.type === 'background') continue;
@@ -47,6 +56,18 @@ export function updatePhysics(
       continue;
     }
 
+    collisions.push({ side, platform, overlap });
+  }
+
+  collisions.sort((a, b) => {
+    const sideOrder = { left: 0, right: 1, top: 2, bottom: 3 };
+    return sideOrder[a.side] - sideOrder[b.side];
+  });
+
+  if (collisions.length > 0) {
+    const { side, platform } = collisions[0];
+    const platformBox = getBoundingBox(platform);
+
     switch (side) {
       case 'top':
         player.y = platformBox.top + player.height / 2;
@@ -60,15 +81,15 @@ export function updatePhysics(
         break;
 
       case 'left':
+        player.y = oldPlayerY;
         player.x = platformBox.left - player.width / 2;
         break;
 
       case 'right':
+        player.y = oldPlayerY;
         player.x = platformBox.right + player.width / 2;
         break;
     }
-
-    break;
   }
 
   if (player.y < -2.0) {

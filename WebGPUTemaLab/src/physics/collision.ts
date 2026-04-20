@@ -37,17 +37,18 @@ export function calculateOverlap(playerBox: BoundingBox, platformBox: BoundingBo
 export function getCollisionSide(
   overlap: ReturnType<typeof calculateOverlap>
 ): 'top' | 'bottom' | 'left' | 'right' {
-  const minOverlap = Math.min(
-    Math.abs(overlap.top),
-    Math.abs(overlap.bottom),
-    Math.abs(overlap.left),
-    Math.abs(overlap.right)
-  );
+  const absTop = Math.abs(overlap.top);
+  const absBottom = Math.abs(overlap.bottom);
+  const absLeft = Math.abs(overlap.left);
+  const absRight = Math.abs(overlap.right);
+  const minSide = Math.min(absLeft, absRight);
+  const minVertical = Math.min(absTop, absBottom);
 
-  if (minOverlap === Math.abs(overlap.top)) return 'top';
-  if (minOverlap === Math.abs(overlap.bottom)) return 'bottom';
-  if (minOverlap === Math.abs(overlap.left)) return 'left';
-  return 'right';
+  if (minSide < minVertical * 0.3) {
+    return absLeft < absRight ? 'left' : 'right';
+  }
+
+  return absTop < absBottom ? 'top' : 'bottom';
 }
 
 export function shouldResolveCollision(
@@ -61,9 +62,9 @@ export function shouldResolveCollision(
     case 'bottom':
       return overlap.bottom < 0 && playerVy > 0;
     case 'left':
-      return overlap.left > 0 && playerVy > 0;
+      return overlap.left > 0;
     case 'right':
-      return overlap.right > 0 && playerVy > 0;
+      return overlap.right > 0;
     default:
       return false;
   }
