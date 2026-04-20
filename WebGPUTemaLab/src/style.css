@@ -1,4 +1,5 @@
-body, html {
+body,
+html {
   margin: 0;
   padding: 0;
   width: 100%;
@@ -10,4 +11,67 @@ canvas {
   display: block;
   width: 100%;
   height: 100%;
+}
+
+#winScreen,
+#loseScreen,
+#startScreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+}
+
+#winScreen.hidden,
+#loseScreen.hidden,
+#startScreen.hidden {
+  display: none;
+}
+
+.win-content,
+.lose-content,
+.start-content {
+  text-align: center;
+  color: white;
+  font-size: 48px;
+  animation: fadeIn 0.5s ease-in;
+  font-family: consolas;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+#continueBtn,
+#tryAgainBtn,
+#startBtn {
+  margin-top: 20px;
+  padding: 10px 30px;
+  font-size: 18px;
+  background: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#continueBtn:hover,
+#tryAgainBtn:hover,
+#startBtn:hover {
+  background: #ddd;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }

@@ -26,6 +26,6 @@ export const level1: GameObject[] = [
   { x: 3.8, y: -0.65, width: 1.5, height: 0.1, type: 'platform_grass', name: 'main2' },
   { x: 3.8, y: -0.875, width: 1.5, height: 0.35, type: 'platform_dirt', name: 'main2' },
 
-  { x: 3.795, y: -0.45, width: 0.01, height: 0.3, type: 'flag_pole', name: 'end_flag_pole' },
   { x: 3.8525, y: -0.3, width: 0.125, height: 0.075, type: 'flag', name: 'end_flag' },
+  { x: 3.795, y: -0.4325, width: 0.01, height: 0.335, type: 'flag_pole', name: 'end_flag_pole' },
 ];

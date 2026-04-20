@@ -1,14 +1,38 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/src/style.css" />
-    <title>WebGpu Jatek</title>
-  </head>
-  <body>
-    <canvas id="canvas"></canvas>
-    <script type="module" src="/src/main.ts"></script>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/src/style.css" />
+  <title>WebGpu Jatek</title>
+</head>
+
+<body>
+  <canvas id="canvas"></canvas>
+  <div id="winScreen" class="hidden">
+    <div class="win-content">
+      <h1>GG! YOU WON</h1>
+      <p>Well done!</p>
+      <button id="continueBtn">Continue</button>
+    </div>
+  </div>
+  <div id="loseScreen" class="hidden">
+    <div class="lose-content">
+      <h1>GAME OVER</h1>
+      <p>Next time you get it!</p>
+      <button id="tryAgainBtn">Try Again</button>
+    </div>
+  </div>
+  <div id="startScreen">
+    <div class="start-content">
+      <h1>WELCOME TO THE GAME</h1>
+      <p>Good luck!</p>
+      <button id="startBtn">Start</button>
+    </div>
+  </div>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+
 </html>
