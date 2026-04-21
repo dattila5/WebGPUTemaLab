@@ -5,7 +5,7 @@ import { updateObjectBuffer, updateCameraUniformBuffer } from '../gpu/buffer';
 import { player, updatePlayerMovement } from '../game/player';
 import { updateCamera, smoothCameraX, smoothOffset } from '../game/camera';
 import type { GameObject } from '../core/gameObject';
-import { didPlayerFallOut, didPlayerWin, isPlayerOutOfMap } from '../game/gameState';
+import { didPlayerFallOut, didPlayerWin, isPlayerOutOfMap, didPlayerDiedDueToSpike } from '../game/gameState';
 
 let frameCount = 0;
 const FIXED_TIMESTEP = 1 / 60;
@@ -24,6 +24,7 @@ function renderFrame(
     frameCount++;
     accumulator += FIXED_TIMESTEP;
 
+    didPlayerDiedDueToSpike();
     didPlayerFallOut();
     isPlayerOutOfMap();
     didPlayerWin();

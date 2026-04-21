@@ -6,6 +6,8 @@ import { isGameOver, gameStarted } from '../game/gameState';
 const GRAVITY = -0.0002;
 const JUMP_STRENGTH = 0.012;
 
+export let didPlayerTouchSpike = false;
+
 interface GameObjectWithVelocity extends GameObject {
   vy?: number;
   isGrounded?: boolean;
@@ -15,6 +17,9 @@ export function updatePhysics(
   player: GameObjectWithVelocity,
   isJumping: boolean
 ): void {
+
+  didPlayerTouchSpike = false;
+
   if (!gameStarted || isGameOver) return;
 
   if (player.vy === undefined) player.vy = 0;
@@ -29,16 +34,20 @@ export function updatePhysics(
 
   player.y += player.vy;
 
-  const playerBox = getBoundingBox(player);
-
   player.isGrounded = false;
 
   for (const platform of level1) {
     if (platform.type === 'background') continue;
 
+    const playerBox = getBoundingBox(player);
     const platformBox = getBoundingBox(platform);
 
     if (!checkAABBCollision(playerBox, platformBox)) continue;
+
+    if (platform.type === 'spike') {
+      didPlayerTouchSpike = true;
+      continue;
+    }
 
     const overlap = calculateOverlap(playerBox, platformBox);
 
@@ -65,26 +74,22 @@ export function updatePhysics(
 
     switch (side) {
       case 'top':
-        if (overlap.top < 0) {
-          player.y = platformBox.top + player.height / 2;
-          player.vy = 0;
-          player.isGrounded = true;
-        }
+        player.y = platformBox.top + player.height / 2;
+        player.vy = 0;
+        player.isGrounded = true;
         break;
 
       case 'bottom':
-        if (overlap.bottom > 0) {
-          player.y = platformBox.bottom - player.height / 2;
-          player.vy = 0;
-        }
+        player.y = platformBox.bottom - player.height / 2;
+        player.vy = 0;
         break;
 
       case 'left':
-        if (overlap.left > 0)  player.x = platformBox.left - player.width / 2;
+        player.x = platformBox.left - player.width / 2;
         break;
 
       case 'right':
-        if (overlap.right < 0) player.x = platformBox.right + player.width / 2;
+        player.x = platformBox.right + player.width / 2;
         break;
     }
   }
