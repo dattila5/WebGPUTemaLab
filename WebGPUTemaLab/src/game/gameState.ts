@@ -31,7 +31,7 @@ export function didPlayerDiedDueToSpike(): void{
 }
 
 export function startGame(): void {
-  player.x = 1.9;
+  player.x = -0.9;
   player.y = -0.35;
   isGameOver = false;
   gameStarted = true;
