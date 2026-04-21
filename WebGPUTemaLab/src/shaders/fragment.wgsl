@@ -16,22 +16,25 @@ fn main(input: VertexOutput) -> @location(0) vec4<f32> {
     let u_offset = f32(obj_type) / 9.0;
     let u_width = 1.0 / 9.0;
 
+    var repeat_count = 9.0;
+
     if (obj_type == 1u) {
-          uv.x = u_offset + fract(uv.x * 115.0) * u_width;
-    }else if(obj_type == 2u){
-          uv.x = u_offset + fract(uv.x * 150.0) * u_width;
-    }else if(obj_type == 3u){
-          uv.x = u_offset + fract(uv.x * 30.0) * u_width;
-    }else if(obj_type == 7u){
-          uv.x = u_offset + fract(uv.x * 20.0) * u_width;
-    }else if(obj_type == 8u) {
-          uv.x = u_offset + fract(uv.x * 25.0) * u_width;
-    }else{
-          uv.x = u_offset + fract(uv.x * 9.0) * u_width;
+        repeat_count = 115.0;
+    } else if(obj_type == 2u) {
+        repeat_count = 150.0;
+    } else if(obj_type == 3u) {
+        repeat_count = 30.0;
+    } else if(obj_type == 7u) {
+        repeat_count = 20.0;
+    } else if(obj_type == 8u) {
+        repeat_count = 100.0;
     }
 
+    let fracted = fract(uv.x * repeat_count);
+    uv.x = u_offset + clamp(fracted, 0.001, 0.999) * u_width;
+
     var color = textureSample(texture, textureSampler, uv);
-        if (color.a < 0.5) {
+    if (color.a < 0.5) {
         discard;
     }
 
