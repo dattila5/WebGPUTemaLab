@@ -1,6 +1,7 @@
 import type { GameObject } from '../core/gameObject';
 import { level1 } from '../level/level';
 import { getBoundingBox, checkAABBCollision, calculateOverlap, getCollisionSide, shouldResolveCollision, } from './collision';
+import { isGameOver, gameStarted } from '../game/gameState';
 
 const GRAVITY = -0.0002;
 const JUMP_STRENGTH = 0.012;
@@ -8,7 +9,6 @@ const JUMP_STRENGTH = 0.012;
 interface GameObjectWithVelocity extends GameObject {
   vy?: number;
   isGrounded?: boolean;
-  isGameOver: boolean;
 }
 
 interface Collision {
@@ -17,26 +17,12 @@ interface Collision {
   overlap: ReturnType<typeof calculateOverlap>;
 }
 
-let gameStarted = false;
-
-document.getElementById('startBtn')?.addEventListener('click', () => {
-  const startScreen = document.getElementById('startScreen');
-  if (startScreen) {
-    startScreen.classList.add('hidden');
-  }
-  gameStarted = true;
-});
-
-export function getGameStarted(): boolean {
-  return gameStarted;
-}
-
 export function updatePhysics(
   player: GameObjectWithVelocity,
   isJumping: boolean
 ): void {
 
-  if (!getGameStarted() || player.isGameOver) return;
+  if (!gameStarted || isGameOver) return;
   if (player.vy === undefined) {
     player.vy = 0;
   }
