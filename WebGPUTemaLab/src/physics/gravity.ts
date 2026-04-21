@@ -1,6 +1,6 @@
 import type { GameObject } from '../core/gameObject';
 import { level1 } from '../level/level';
-import { getBoundingBox, checkAABBCollision, calculateOverlap, getCollisionSide, shouldResolveCollision, } from './collision';
+import { getBoundingBox, checkAABBCollision, calculateOverlap } from './collision';
 import { isGameOver, gameStarted } from '../game/gameState';
 
 const GRAVITY = -0.0002;
@@ -11,24 +11,14 @@ interface GameObjectWithVelocity extends GameObject {
   isGrounded?: boolean;
 }
 
-interface Collision {
-  side: 'top' | 'bottom' | 'left' | 'right';
-  platform: GameObject;
-  overlap: ReturnType<typeof calculateOverlap>;
-}
-
 export function updatePhysics(
   player: GameObjectWithVelocity,
   isJumping: boolean
 ): void {
-
   if (!gameStarted || isGameOver) return;
-  if (player.vy === undefined) {
-    player.vy = 0;
-  }
-  if (player.isGrounded === undefined) {
-    player.isGrounded = false;
-  }
+
+  if (player.vy === undefined) player.vy = 0;
+  if (player.isGrounded === undefined) player.isGrounded = false;
 
   player.vy += GRAVITY;
 
@@ -38,13 +28,12 @@ export function updatePhysics(
   }
 
   player.y += player.vy;
-  player.isGrounded = false;
 
   const playerBox = getBoundingBox(player);
 
-  const collisions: Collision[] = [];
+  player.isGrounded = false;
 
-  for (let platform of level1) {
+  for (const platform of level1) {
     if (platform.type === 'background') continue;
 
     const platformBox = getBoundingBox(platform);
@@ -52,54 +41,51 @@ export function updatePhysics(
     if (!checkAABBCollision(playerBox, platformBox)) continue;
 
     const overlap = calculateOverlap(playerBox, platformBox);
-    const side = getCollisionSide(overlap);
 
-    if (!shouldResolveCollision(side, overlap, player.vy)) {
-      continue;
+    const absTop = Math.abs(overlap.top);
+    const absBottom = Math.abs(overlap.bottom);
+    const absLeft = Math.abs(overlap.left);
+    const absRight = Math.abs(overlap.right);
+
+    let min = absTop;
+    let side: 'top' | 'bottom' | 'left' | 'right' = 'top';
+
+    if (absBottom < min) {
+      min = absBottom;
+      side = 'bottom';
     }
-
-    collisions.push({ side, platform, overlap });
-  }
-
-  collisions.sort((a, b) => {
-    const sideOrder = { left: 0, right: 1, top: 2, bottom: 3 };
-    return sideOrder[a.side] - sideOrder[b.side];
-  });
-
-  if (collisions.length > 0) {
-    const { side, platform } = collisions[0];
-    const platformBox = getBoundingBox(platform);
-
-    console.log('Collision:', side, {
-      playerY: player.y,
-      playerVy: player.vy,
-      platformTop: platformBox.top,
-      platformBox
-    });
+    if (absLeft < min) {
+      min = absLeft;
+      side = 'left';
+    }
+    if (absRight < min) {
+      min = absRight;
+      side = 'right';
+    }
 
     switch (side) {
       case 'top':
-        player.y = platformBox.top + player.height / 2;
-        player.vy = 0;
-        player.isGrounded = true;
+        if (overlap.top < 0) {
+          player.y = platformBox.top + player.height / 2;
+          player.vy = 0;
+          player.isGrounded = true;
+        }
         break;
 
       case 'bottom':
-        player.y = platformBox.bottom - player.height / 2;
-        player.vy = 0;
+        if (overlap.bottom > 0) {
+          player.y = platformBox.bottom - player.height / 2;
+          player.vy = 0;
+        }
         break;
 
       case 'left':
-        player.x = platformBox.left - player.width / 2;
+        if (overlap.left > 0)  player.x = platformBox.left - player.width / 2;
         break;
 
       case 'right':
-        player.x = platformBox.right + player.width / 2;
+        if (overlap.right < 0) player.x = platformBox.right + player.width / 2;
         break;
     }
-  }
-
-  if (player.y < -2.0) {
-    player.y = 1.0;
   }
 }
