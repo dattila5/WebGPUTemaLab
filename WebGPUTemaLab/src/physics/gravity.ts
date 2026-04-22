@@ -2,11 +2,13 @@ import type { GameObject } from '../core/gameObject';
 import { level1 } from '../level/level';
 import { getBoundingBox, checkAABBCollision, calculateOverlap } from './collision';
 import { isGameOver, gameStarted } from '../game/gameState';
+import { enemy } from '../game/enemy'
 
 const GRAVITY = -0.0002;
-const JUMP_STRENGTH = 0.012;
+const JUMP_STRENGTH = 0.0115;
 
 export let didPlayerTouchSpike = false;
+export let didPlayerTouchEnemy = false;
 
 interface GameObjectWithVelocity extends GameObject {
   vy?: number;
@@ -19,6 +21,7 @@ export function updatePhysics(
 ): void {
 
   didPlayerTouchSpike = false;
+  didPlayerTouchEnemy = false;
 
   if (!gameStarted || isGameOver) return;
 
@@ -40,12 +43,19 @@ export function updatePhysics(
     if (platform.type === 'background') continue;
 
     const playerBox = getBoundingBox(player);
-    const platformBox = getBoundingBox(platform);
+    let platformBox = null;
+
+    if(platform.type === 'spike') platformBox = getBoundingBox(platform, 2);
+    else platformBox = getBoundingBox(platform);
 
     if (!checkAABBCollision(playerBox, platformBox)) continue;
 
     if (platform.type === 'spike') {
       didPlayerTouchSpike = true;
+      continue;
+    }
+    if(platform.type === 'enemy'){
+      didPlayerTouchEnemy = true;
       continue;
     }
 
@@ -93,4 +103,11 @@ export function updatePhysics(
         break;
     }
   }
+
+    const playerBox = getBoundingBox(player);
+    const platformBox = getBoundingBox(enemy);
+
+    if (checkAABBCollision(playerBox, platformBox)){
+      didPlayerTouchEnemy = true;
+    };
 }

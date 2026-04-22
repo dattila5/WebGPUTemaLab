@@ -1,12 +1,12 @@
 import { player } from '../game/player';
 import { showLoseScreen, showWinScreen } from '../game/ui'
-import { didPlayerTouchSpike } from '../physics/gravity'
+import { didPlayerTouchSpike, didPlayerTouchEnemy } from '../physics/gravity'
 
 export let isGameOver = false;
 export let gameStarted = false;
 
-export function didPlayerFallOut(): void {
-  if (player.y <= -1.1) {
+export function didPlayerDied(): void {
+  if (player.y <= -1.1 || didPlayerTouchSpike || didPlayerTouchEnemy) {
     showLoseScreen();
     gameOver();
   }
@@ -23,16 +23,9 @@ export function didPlayerWin(): void {
   }
 }
 
-export function didPlayerDiedDueToSpike(): void{
-  if(didPlayerTouchSpike){
-    showLoseScreen();
-    gameOver();
-  }
-}
-
 export function startGame(): void {
   player.x = -0.9;
-  player.y = -0.35;
+  player.y = -0.52;
   isGameOver = false;
   gameStarted = true;
 }
@@ -46,6 +39,6 @@ export function isPlayerOutOfMap(): void {
   }
 }
 
-export function setGameOver(state: boolean): void{
+export function setGameOver(state: boolean): void {
   isGameOver = state;
 }

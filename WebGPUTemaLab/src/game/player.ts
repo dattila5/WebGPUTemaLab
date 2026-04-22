@@ -8,7 +8,7 @@ export interface GameObjectWithVelocity extends GameObject {
 
 export const player: GameObjectWithVelocity = {
   x: -0.9,
-  y: -0.35,
+  y: -0.52,
   width: 0.05,
   height: 0.15,
   type: 'player',

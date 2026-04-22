@@ -7,12 +7,12 @@ export interface BoundingBox {
   right: number;
 }
 
-export function getBoundingBox(obj: GameObject): BoundingBox {
+export function getBoundingBox(obj: GameObject, spikeNum: number = 1): BoundingBox {
   return {
-    top: obj.y + obj.height / 2,
-    bottom: obj.y - obj.height / 2,
-    left: obj.x - obj.width / 2,
-    right: obj.x + obj.width / 2,
+    top: obj.y + (obj.height / 2) / spikeNum,
+    bottom: obj.y - (obj.height / 2) / spikeNum,
+    left: obj.x - (obj.width / 2) / spikeNum,
+    right: obj.x + (obj.width / 2) / spikeNum,
   };
 }
 

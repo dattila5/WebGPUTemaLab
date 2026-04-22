@@ -7,5 +7,4 @@ export type GameObject = {
   shape?: 'quad' | 'triangle';
   name?: string;
   isGrounded?: boolean;
-  velocityY?: number;
 };

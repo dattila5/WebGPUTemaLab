@@ -19,7 +19,7 @@ async function main() {
     const sampler = createTextureSampler(device);
     console.log('Texture loaded!');
 
-    const positionBuffer = createPositionBuffer(device, 1 + 1 + level1.length);
+    const positionBuffer = createPositionBuffer(device, 1 + 1 + 1 + level1.length);
     const cameraBuffer = createCameraUniformBuffer(device);
     const indexBuffer = createIndexBuffer(device);
     const uvBuffer = createUVBuffer(device);
