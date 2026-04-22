@@ -131,10 +131,6 @@ export function updateObjectBuffer(
     else if (obj.type === 'background') typeCode = 8;
 
     data[i * 8 + 4] = typeCode;
-
-    let shapeCode = 0;
-    if (obj.shape === 'triangle') shapeCode = 1;
-    data[i * 8 + 5] = shapeCode;
   }
 
   device.queue.writeBuffer(buffer, 0, data);

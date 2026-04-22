@@ -4,7 +4,6 @@ export type GameObject = {
   width: number;
   height: number;
   type: 'player' | 'platform_grass' | 'platform_dirt' | 'platform_block' | 'enemy' | 'spike' | 'flag_pole' | 'flag' | 'background';
-  shape?: 'quad' | 'triangle';
   name?: string;
   isGrounded?: boolean;
 };

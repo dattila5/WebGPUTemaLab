@@ -17,11 +17,11 @@ const maxX = 1.355;
 export function updateEnemyMovement(): void {
   if (isGameOver || !gameStarted) return;
 
-  if(switchNum % 2 == 0){
+  if(switchNum == 0){
     enemy.x += speed;
     if(enemy.x >= maxX) switchNum++;
   } else {
     enemy.x -= speed;
-    if(enemy.x <= minX) switchNum++;
+    if(enemy.x <= minX) switchNum--;
   }
 }
