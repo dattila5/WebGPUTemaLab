@@ -1,18 +1,19 @@
 import { keysPressed } from '../input/keyboard';
 import { updatePhysics } from '../physics/gravity';
-import { level1 } from '../level/level';
+import { easyLevel, mediumLevel, hardLevel } from '../level/level';
 import { updateObjectBuffer, updateCameraUniformBuffer } from '../gpu/buffer';
-import { player, updatePlayerMovement } from '../game/player';
-import { enemy, updateEnemyMovement } from '../game/enemy';
+import { player } from '../game/player';
+import { enemies } from '../game/enemy';
 import { updateCamera, smoothCameraX, smoothOffset } from '../game/camera';
 import type { GameObject } from '../core/gameObject';
-import { didPlayerWin, isPlayerOutOfMap, didPlayerDied } from '../game/gameState';
+import { gameUpdate } from '../game/gameUpdate';
+import { currentLevel } from '../game/gameState';
 
 let frameCount = 0;
 const FIXED_TIMESTEP = 1 / 60;
 let accumulator = 0;
 
-function renderFrame(
+export function renderFrame(
   device: GPUDevice,
   context: GPUCanvasContext,
   pipeline: GPURenderPipeline,
@@ -25,11 +26,7 @@ function renderFrame(
   frameCount++;
   accumulator += FIXED_TIMESTEP;
 
-  didPlayerDied();
-  isPlayerOutOfMap();
-  didPlayerWin();
-  updateEnemyMovement();
-  updatePlayerMovement(keysPressed);
+  gameUpdate();
 
   while (accumulator >= FIXED_TIMESTEP) {
     updatePhysics(player, keysPressed[' ']);
@@ -47,7 +44,16 @@ function renderFrame(
     type: 'background', name: 'bg'
   };
 
-  const allObjects = [backgroundObject, player, enemy, ...level1];
+  const getLevelObjects = () => {
+    switch(currentLevel) {
+      case 1: return easyLevel;
+      case 2: return mediumLevel;
+      case 3: return hardLevel;
+      default: return easyLevel;
+    }
+  };
+
+  const allObjects = [backgroundObject, player, ...enemies, ...getLevelObjects()];
   updateObjectBuffer(device, positionBuffer, allObjects);
   updateCameraUniformBuffer(device, cameraBuffer, smoothCameraX, smoothOffset);
 
@@ -73,5 +79,3 @@ function renderFrame(
   const commandBuffer = encoder.finish();
   device.queue.submit([commandBuffer]);
 }
-
-export { renderFrame };

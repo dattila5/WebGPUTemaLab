@@ -27,7 +27,7 @@ fn main(input: VertexOutput) -> @location(0) vec4<f32> {
     } else if(obj_type == 7u) {
         repeat_count = 20.0;
     } else if(obj_type == 8u) {
-        repeat_count = 100.0;
+        repeat_count = 50.0;
     }
 
     let fracted = fract(uv.x * repeat_count);

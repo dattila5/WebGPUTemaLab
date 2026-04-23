@@ -11,7 +11,7 @@ export function updateCamera(playerX: number): void {
     } else if(playerX > 3.4){
         targetCameraX = 2.65;
         targetOffset = 0.85;
-    }else {
+    } else {
         targetCameraX = playerX;
         targetOffset = 0.0;
     }

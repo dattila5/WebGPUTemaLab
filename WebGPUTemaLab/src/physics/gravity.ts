@@ -1,8 +1,8 @@
-import type { GameObject } from '../core/gameObject';
-import { level1 } from '../level/level';
+import { easyLevel } from '../level/level';
 import { getBoundingBox, checkAABBCollision, calculateOverlap } from './collision';
 import { isGameOver, gameStarted } from '../game/gameState';
-import { enemy } from '../game/enemy'
+import { enemies } from '../game/enemy'
+import type { Player } from '../game/player'
 
 const GRAVITY = -0.0002;
 const JUMP_STRENGTH = 0.0115;
@@ -10,13 +10,8 @@ const JUMP_STRENGTH = 0.0115;
 export let didPlayerTouchSpike = false;
 export let didPlayerTouchEnemy = false;
 
-interface GameObjectWithVelocity extends GameObject {
-  vy?: number;
-  isGrounded?: boolean;
-}
-
 export function updatePhysics(
-  player: GameObjectWithVelocity,
+  player: Player,
   isJumping: boolean
 ): void {
 
@@ -39,13 +34,13 @@ export function updatePhysics(
 
   player.isGrounded = false;
 
-  for (const platform of level1) {
+  for (const platform of easyLevel) {
     if (platform.type === 'background') continue;
 
     const playerBox = getBoundingBox(player);
     let platformBox = null;
 
-    if(platform.type === 'spike') platformBox = getBoundingBox(platform, 2);
+    if (platform.type === 'spike') platformBox = getBoundingBox(platform, 2);
     else platformBox = getBoundingBox(platform);
 
     if (!checkAABBCollision(playerBox, platformBox)) continue;
@@ -54,7 +49,7 @@ export function updatePhysics(
       didPlayerTouchSpike = true;
       continue;
     }
-    if(platform.type === 'enemy'){
+    if (platform.type === 'enemy') {
       didPlayerTouchEnemy = true;
       continue;
     }
@@ -104,10 +99,11 @@ export function updatePhysics(
     }
   }
 
-    const playerBox = getBoundingBox(player);
-    const platformBox = getBoundingBox(enemy);
-
-    if (checkAABBCollision(playerBox, platformBox)){
+  const playerBox = getBoundingBox(player);
+  enemies.forEach((x) => {
+    const platformBox = getBoundingBox(x);
+    if (checkAABBCollision(playerBox, platformBox)) {
       didPlayerTouchEnemy = true;
     };
+  });
 }

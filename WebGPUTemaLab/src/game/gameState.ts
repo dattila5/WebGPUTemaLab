@@ -4,6 +4,11 @@ import { didPlayerTouchSpike, didPlayerTouchEnemy } from '../physics/gravity'
 
 export let isGameOver = false;
 export let gameStarted = false;
+export let currentLevel = 1;
+
+export function setLevel(levelNum: number): void {
+  currentLevel = levelNum;
+}
 
 export function didPlayerDied(): void {
   if (player.y <= -1.1 || didPlayerTouchSpike || didPlayerTouchEnemy) {
@@ -31,12 +36,8 @@ export function startGame(): void {
 }
 
 export function isPlayerOutOfMap(): void {
-  if (player.x <= -1.04) {
-    player.x = -1.04;
-  }
-  if (player.x >= 4.465) {
-    player.x = 4.465;
-  }
+  if (player.x <= -1.04) player.x = -1.04;
+  if (player.x >= 4.465) player.x = 4.465;
 }
 
 export function setGameOver(state: boolean): void {

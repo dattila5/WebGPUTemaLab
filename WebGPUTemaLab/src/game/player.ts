@@ -1,12 +1,12 @@
 import type { GameObject } from '../core/gameObject';
 import { isGameOver, gameStarted } from '../game/gameState';
 
-export interface GameObjectWithVelocity extends GameObject {
+export interface Player extends GameObject {
   vy?: number;
   isGrounded?: boolean;
 }
 
-export const player: GameObjectWithVelocity = {
+export const player: Player = {
   x: -0.9,
   y: -0.52,
   width: 0.05,

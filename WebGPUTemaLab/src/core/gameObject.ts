@@ -5,5 +5,4 @@ export type GameObject = {
   height: number;
   type: 'player' | 'platform_grass' | 'platform_dirt' | 'platform_block' | 'enemy' | 'spike' | 'flag_pole' | 'flag' | 'background';
   name?: string;
-  isGrounded?: boolean;
 };

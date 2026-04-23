@@ -5,7 +5,9 @@ import { initKeyboardInput } from './input/keyboard';
 import { renderFrame } from './render/renderer';
 import vertexShaderCode from './shaders/vertex.wgsl?raw';
 import fragmentShaderCode from './shaders/fragment.wgsl?raw';
-import { level1 } from './level/level';
+import { easyLevel } from './level/level';
+import { enemies } from './game/enemy';
+import { currentLevel } from './game/gameState';
 
 async function main() {
   try {
@@ -15,11 +17,11 @@ async function main() {
     const pipeline = createRenderPipeline(device, canvasFormat, vertexShaderCode, fragmentShaderCode);
     console.log('Pipeline created!');
 
-    const texture = await loadTexture(device, '/textures/atlas.png');
+    const texture = await loadTexture(device, `/textures/atlas${currentLevel}.png`);
     const sampler = createTextureSampler(device);
     console.log('Texture loaded!');
 
-    const positionBuffer = createPositionBuffer(device, 1 + 1 + 1 + level1.length);
+    const positionBuffer = createPositionBuffer(device, 1 + 1 + enemies.length + easyLevel.length);
     const cameraBuffer = createCameraUniformBuffer(device);
     const indexBuffer = createIndexBuffer(device);
     const uvBuffer = createUVBuffer(device);
