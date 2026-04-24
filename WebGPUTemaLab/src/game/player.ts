@@ -18,7 +18,7 @@ export const player: Player = {
 
 export function updatePlayerMovement(keysPressed: Record<string, boolean>): void {
   if (isGameOver || !gameStarted) return;
-  const speed = 0.002;
+  const speed = 0.001875;
   if (keysPressed['a']) player.x -= speed;
   if (keysPressed['d']) player.x += speed;
 }

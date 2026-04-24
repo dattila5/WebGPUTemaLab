@@ -1,4 +1,4 @@
-import { startGame, nextLevel } from '../game/gameState';
+import { startGame, nextLevel, currentLevel } from '../game/gameState';
 
 const screenButtons = [
   { buttonId: 'continueBtn', screenId: 'winScreen', action: nextLevel },
@@ -22,6 +22,14 @@ export function showWinScreen(): void {
 
 export function showStartScreen(): void{
   setScreenVisible('startScreen');
+}
+
+export function changeButtonTextIfNeeded(): void{
+  const btn = document.getElementById('continueBtn');
+  if(btn == null) return;
+
+  if(currentLevel == 3) btn.textContent = "End Game";
+  else btn.textContent = "Continue";
 }
 
 screenButtons.forEach(({ buttonId, screenId, action }) => {

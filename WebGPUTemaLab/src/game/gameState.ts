@@ -29,7 +29,7 @@ export function gameOver(): void {
 }
 
 export function didPlayerWin(): void {
-  if (player.x >= 4.1) {
+  if (player.x >= 7.5) {
     showWinScreen();
     gameOver();
   }
@@ -52,7 +52,7 @@ export function gameReset(): void{
 
 export function isPlayerOutOfMap(): void {
   if (player.x <= -1.04) player.x = -1.04;
-  if (player.x >= 4.465) player.x = 4.465;
+  if (player.x >= 7.7) player.x = 7.7;
 }
 
 export function setGameOver(state: boolean): void {

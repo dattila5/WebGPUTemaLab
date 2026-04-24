@@ -49,10 +49,6 @@ export function updatePhysics(
       didPlayerTouchSpike = true;
       continue;
     }
-    if (platform.type === 'enemy') {
-      didPlayerTouchEnemy = true;
-      continue;
-    }
 
     const overlap = calculateOverlap(playerBox, platformBox);
 

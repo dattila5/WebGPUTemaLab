@@ -39,10 +39,7 @@ export function renderFrame(
     console.log(`Player: x=${player.x.toFixed(2)}, y=${player.y.toFixed(2)}, Camera: ${smoothCameraX.toFixed(2)}`);
   }
 
-  const backgroundObject: GameObject = {
-    x: 0, y: 0, width: 10, height: 2,
-    type: 'background', name: 'bg'
-  };
+  const backgroundObject: GameObject = { x: 0, y: 0, width: 17, height: 2, type: 'background' };
 
   const getLevelObjects = () => {
     switch(currentLevel) {
