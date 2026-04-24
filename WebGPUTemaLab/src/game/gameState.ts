@@ -1,13 +1,20 @@
 import { player } from '../game/player';
-import { showLoseScreen, showWinScreen } from '../game/ui'
+import { showLoseScreen, showWinScreen, showStartScreen } from '../game/ui'
 import { didPlayerTouchSpike, didPlayerTouchEnemy } from '../physics/gravity'
 
 export let isGameOver = false;
 export let gameStarted = false;
 export let currentLevel = 1;
 
-export function setLevel(levelNum: number): void {
-  currentLevel = levelNum;
+export function nextLevel(): void {
+  if (currentLevel < 3) {
+    currentLevel++;
+    startGame();
+  }
+  else {
+    currentLevel = 1;
+    gameReset();
+  }
 }
 
 export function didPlayerDied(): void {
@@ -33,6 +40,14 @@ export function startGame(): void {
   player.y = -0.52;
   isGameOver = false;
   gameStarted = true;
+}
+
+export function gameReset(): void{
+  player.x = -0.9;
+  player.y = -0.52;
+  isGameOver = true;
+  gameStarted = false;
+  showStartScreen();
 }
 
 export function isPlayerOutOfMap(): void {

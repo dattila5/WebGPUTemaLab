@@ -1,39 +1,33 @@
-import { startGame } from '../game/gameState';
+import { startGame, nextLevel } from '../game/gameState';
+
+const screenButtons = [
+  { buttonId: 'continueBtn', screenId: 'winScreen', action: nextLevel },
+  { buttonId: 'tryAgainAfterWinBtn', screenId: 'winScreen', action: startGame },
+  { buttonId: 'tryAgainBtn', screenId: 'loseScreen', action: startGame },
+  { buttonId: 'startBtn', screenId: 'startScreen', action: startGame },
+];
+
+export function setScreenVisible(screenId: string): void{
+  const screen = document.getElementById(screenId);
+  if (screen) screen.classList.remove('hidden');
+}
 
 export function showLoseScreen(): void {
-  const loseScreen = document.getElementById('loseScreen');
-  if (loseScreen) {
-    loseScreen.classList.remove('hidden');
-  }
+  setScreenVisible('loseScreen')
 }
 
 export function showWinScreen(): void {
-  const winScreen = document.getElementById('winScreen');
-  if (winScreen) {
-    winScreen.classList.remove('hidden');
-  }
+  setScreenVisible('winScreen')
 }
 
-document.getElementById('continueBtn')?.addEventListener('click', () => {
-  const winScreen = document.getElementById('winScreen');
-  if (winScreen) {
-    winScreen.classList.add('hidden');
-  }
-  startGame();
-});
+export function showStartScreen(): void{
+  setScreenVisible('startScreen');
+}
 
-document.getElementById('tryAgainBtn')?.addEventListener('click', () => {
-  const loseScreen = document.getElementById('loseScreen');
-  if (loseScreen) {
-    loseScreen.classList.add('hidden');
-  }
-  startGame();
-});
-
-document.getElementById('startBtn')?.addEventListener('click', () => {
-  const startScreen = document.getElementById('startScreen');
-  if (startScreen) {
-    startScreen.classList.add('hidden');
-  }
-  startGame();
+screenButtons.forEach(({ buttonId, screenId, action }) => {
+  document.getElementById(buttonId)?.addEventListener('click', () => {
+    const screen = document.getElementById(screenId);
+    if (screen) screen.classList.add('hidden');
+    action();
+  });
 });

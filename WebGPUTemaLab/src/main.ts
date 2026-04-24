@@ -5,7 +5,7 @@ import { initKeyboardInput } from './input/keyboard';
 import { renderFrame } from './render/renderer';
 import vertexShaderCode from './shaders/vertex.wgsl?raw';
 import fragmentShaderCode from './shaders/fragment.wgsl?raw';
-import { easyLevel } from './level/level';
+import { easyLevel, mediumLevel, hardLevel } from './level/level';
 import { enemies } from './game/enemy';
 import { currentLevel } from './game/gameState';
 
@@ -17,19 +17,27 @@ async function main() {
     const pipeline = createRenderPipeline(device, canvasFormat, vertexShaderCode, fragmentShaderCode);
     console.log('Pipeline created!');
 
-    const texture = await loadTexture(device, `/textures/atlas${currentLevel}.png`);
+    const textures = {
+      1: await loadTexture(device, '/textures/atlas1.png'),
+      2: await loadTexture(device, '/textures/atlas2.png'),
+      3: await loadTexture(device, '/textures/atlas3.png'),
+    };
     const sampler = createTextureSampler(device);
     console.log('Texture loaded!');
 
-    const positionBuffer = createPositionBuffer(device, 1 + 1 + enemies.length + easyLevel.length);
+    const maxLevelLength = Math.max(easyLevel.length, mediumLevel.length, hardLevel.length);
+    const positionBuffer = createPositionBuffer(device, 1 + 1 + enemies.length + maxLevelLength);
     const cameraBuffer = createCameraUniformBuffer(device);
     const indexBuffer = createIndexBuffer(device);
     const uvBuffer = createUVBuffer(device);
 
-    const bindGroup = createPositionBindGroup(device, pipeline, positionBuffer, cameraBuffer, texture, sampler);
+    let bindGroup = createPositionBindGroup(device, pipeline, positionBuffer, cameraBuffer, textures[1], sampler);
     initKeyboardInput();
 
     function gameLoop() {
+      const newTexture = textures[currentLevel as 1 | 2 | 3];
+      bindGroup = createPositionBindGroup(device, pipeline, positionBuffer, cameraBuffer, newTexture, sampler);
+
       renderFrame(device, context, pipeline, positionBuffer, cameraBuffer, indexBuffer, uvBuffer, bindGroup);
       requestAnimationFrame(gameLoop);
     }

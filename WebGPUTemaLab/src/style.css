@@ -50,7 +50,8 @@ canvas {
 
 #continueBtn,
 #tryAgainBtn,
-#startBtn {
+#startBtn,
+#tryAgainAfterWinBtn {
   margin-top: 20px;
   padding: 10px 30px;
   font-size: 18px;
@@ -62,7 +63,8 @@ canvas {
 
 #continueBtn:hover,
 #tryAgainBtn:hover,
-#startBtn:hover {
+#startBtn:hover,
+#tryAgainAfterWinBtn:hover {
   background: #ddd;
 }
 
