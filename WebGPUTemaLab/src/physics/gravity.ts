@@ -1,10 +1,11 @@
-import { easyLevel } from '../level/level';
+import { easyLevel, mediumLevel, hardLevel } from '../level/level';
 import { getBoundingBox, checkAABBCollision, calculateOverlap } from './collision';
 import { isGameOver, gameStarted } from '../game/gameState';
-import { enemies } from '../game/enemy'
-import type { Player } from '../game/player'
+import { enemies } from '../game/enemy';
+import type { Player } from '../game/player';
+import { currentLevel } from '../game/gameState';
 
-const GRAVITY = -0.0002;
+const GRAVITY = -0.000195;
 const JUMP_STRENGTH = 0.0115;
 
 export let didPlayerTouchSpike = false;
@@ -34,7 +35,16 @@ export function updatePhysics(
 
   player.isGrounded = false;
 
-  for (const platform of easyLevel) {
+  const getLevelObjects = () => {
+    switch (currentLevel) {
+      case 1: return easyLevel;
+      case 2: return mediumLevel;
+      case 3: return hardLevel;
+      default: return easyLevel;
+    }
+  };
+
+  for (const platform of getLevelObjects()) {
     if (platform.type === 'background') continue;
 
     const playerBox = getBoundingBox(player);

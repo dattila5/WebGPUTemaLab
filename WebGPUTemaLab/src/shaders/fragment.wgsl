@@ -25,7 +25,7 @@ fn main(input: VertexOutput) -> @location(0) vec4<f32> {
     } else if(obj_type == 3u) {
         repeat_count = 30.0;
     } else if(obj_type == 7u) {
-        repeat_count = 20.0;
+        repeat_count = 9.0;
     } else if(obj_type == 8u) {
         repeat_count = 50.0;
     }

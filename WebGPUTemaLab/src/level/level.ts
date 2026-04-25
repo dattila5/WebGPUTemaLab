@@ -48,8 +48,7 @@ export const easyLevel: GameObject[] = [
   { x: 6.78, y: -0.37, width: 0.04, height: 0.06, type: 'spike' },
   { x: 7.35, y: -0.65, width: 0.9, height: 0.1, type: 'platform_grass' },
   { x: 7.35, y: -0.875, width: 0.9, height: 0.35, type: 'platform_dirt' },
-  { x: 7.2, y: -0.475, width: 0.01, height: 0.25, type: 'flag_pole' },
-  { x: 7.255, y: -0.39, width: 0.1, height: 0.075, type: 'flag' },
+  { x: 7.3, y: -0.5, width: 0.15, height: 0.2, type: 'flag' },
 ];
 
 export const mediumLevel: GameObject[] = [
@@ -100,8 +99,7 @@ export const mediumLevel: GameObject[] = [
   { x: 6.78, y: -0.37, width: 0.04, height: 0.06, type: 'spike' },
   { x: 7.35, y: -0.65, width: 0.9, height: 0.1, type: 'platform_grass' },
   { x: 7.35, y: -0.875, width: 0.9, height: 0.35, type: 'platform_dirt' },
-  { x: 7.2, y: -0.475, width: 0.01, height: 0.25, type: 'flag_pole' },
-  { x: 7.255, y: -0.39, width: 0.1, height: 0.075, type: 'flag' },
+  { x: 7.3, y: -0.5, width: 0.15, height: 0.2, type: 'flag' },
 ];
 
 export const hardLevel: GameObject[] = [
@@ -152,6 +150,5 @@ export const hardLevel: GameObject[] = [
   { x: 6.78, y: -0.37, width: 0.04, height: 0.06, type: 'spike' },
   { x: 7.35, y: -0.65, width: 0.9, height: 0.1, type: 'platform_grass' },
   { x: 7.35, y: -0.875, width: 0.9, height: 0.35, type: 'platform_dirt' },
-  { x: 7.2, y: -0.475, width: 0.01, height: 0.25, type: 'flag_pole' },
-  { x: 7.255, y: -0.39, width: 0.1, height: 0.075, type: 'flag' },
+  { x: 7.3, y: -0.5, width: 0.15, height: 0.2, type: 'flag' },
 ];
