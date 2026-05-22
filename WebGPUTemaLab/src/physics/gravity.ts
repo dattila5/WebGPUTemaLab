@@ -6,7 +6,7 @@ import type { Player } from '../game/player';
 import type { Enemy } from '../game/enemy';
 import { currentLevel } from '../game/gameState';
 
-const GRAVITY = -0.000195;
+const GRAVITY = -0.00019;
 const JUMP_STRENGTH = 0.0115;
 
 export let didPlayerTouchSpike = false;
