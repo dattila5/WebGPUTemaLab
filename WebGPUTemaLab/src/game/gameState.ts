@@ -4,7 +4,7 @@ import { didPlayerTouchSpike, didPlayerTouchEnemy } from '../physics/gravity'
 
 export let isGameOver = false;
 export let gameStarted = false;
-export let currentLevel = 1;
+export let currentLevel = 3;
 
 export function nextLevel(): void {
   if (currentLevel < 3) {

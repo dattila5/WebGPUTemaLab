@@ -15,6 +15,7 @@ struct VertexOutput {
     @builtin(position) position: vec4<f32>,
     @location(0) @interpolate(flat) object_type: u32,
     @location(1) uv: vec2<f32>,
+    @location(2) width: f32,
 };
 
 @group(0) @binding(0) var<storage, read> objects: array<ObjectData>;
@@ -65,6 +66,7 @@ fn main(
     return VertexOutput(
         vec4<f32>(vertex, 0.0, 1.0),
         obj_type,
-        uv
+        uv,
+        obj.position.z
     );
 }

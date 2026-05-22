@@ -3,7 +3,7 @@ import { updatePhysics } from '../physics/gravity';
 import { easyLevel, mediumLevel, hardLevel } from '../level/level';
 import { updateObjectBuffer, updateCameraUniformBuffer } from '../gpu/buffer';
 import { player } from '../game/player';
-import { enemies } from '../game/enemy';
+import { easyLevelEnemies, mediumLevelEnemies, hardLevelEnemies } from '../game/enemy';
 import { updateCamera, smoothCameraX, smoothOffset } from '../game/camera';
 import type { GameObject } from '../core/gameObject';
 import { gameUpdate } from '../game/gameUpdate';
@@ -50,7 +50,16 @@ export function renderFrame(
     }
   };
 
-  const allObjects = [backgroundObject, player, ...enemies, ...getLevelObjects()];
+  const getEnemyObjects = () =>{
+    switch(currentLevel){
+      case 1: return easyLevelEnemies;
+      case 2: return mediumLevelEnemies;
+      case 3: return hardLevelEnemies;
+      default: return easyLevelEnemies;
+    }
+  }
+
+  const allObjects = [backgroundObject, player, ...getEnemyObjects(), ...getLevelObjects()];
   updateObjectBuffer(device, positionBuffer, allObjects);
   updateCameraUniformBuffer(device, cameraBuffer, smoothCameraX, smoothOffset);
 

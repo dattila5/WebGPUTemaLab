@@ -2,6 +2,7 @@ struct VertexOutput {
     @builtin(position) position: vec4<f32>,
     @location(0) @interpolate(flat) object_type: u32,
     @location(1) uv: vec2<f32>,
+    @location(2) width: f32,
 };
 
 @group(0) @binding(2) var texture: texture_2d<f32>;
@@ -17,17 +18,16 @@ fn main(input: VertexOutput) -> @location(0) vec4<f32> {
     let u_width = 1.0 / 9.0;
 
     var repeat_count = 9.0;
-
     if (obj_type == 1u) {
-        repeat_count = 115.0;
-    } else if(obj_type == 2u) {
-        repeat_count = 150.0;
-    } else if(obj_type == 3u) {
-        repeat_count = 30.0;
-    } else if(obj_type == 7u) {
-        repeat_count = 9.0;
-    } else if(obj_type == 8u) {
-        repeat_count = 50.0;
+        repeat_count = input.width * 100.0;
+    } else if (obj_type == 2u) {
+        repeat_count = input.width * 100.0;
+    } else if (obj_type == 3u) {
+        repeat_count = input.width * 200.0;
+    } else if (obj_type == 7u) {
+        repeat_count = input.width * 90.0;
+    } else if (obj_type == 8u) {
+        repeat_count = input.width * 5.0;
     }
 
     let fracted = fract(uv.x * repeat_count);

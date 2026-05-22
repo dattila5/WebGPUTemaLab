@@ -6,7 +6,7 @@ import { renderFrame } from './render/renderer';
 import vertexShaderCode from './shaders/vertex.wgsl?raw';
 import fragmentShaderCode from './shaders/fragment.wgsl?raw';
 import { easyLevel, mediumLevel, hardLevel } from './level/level';
-import { enemies } from './game/enemy';
+import { easyLevelEnemies, mediumLevelEnemies, hardLevelEnemies } from './game/enemy';
 import { currentLevel } from './game/gameState';
 
 async function main() {
@@ -26,7 +26,8 @@ async function main() {
     console.log('Texture loaded!');
 
     const maxLevelLength = Math.max(easyLevel.length, mediumLevel.length, hardLevel.length);
-    const positionBuffer = createPositionBuffer(device, 1 + 1 + enemies.length + maxLevelLength);
+    const maxEnemyLength = Math.max(easyLevelEnemies.length, mediumLevelEnemies.length, hardLevelEnemies.length);
+    const positionBuffer = createPositionBuffer(device, 1 + 1 + maxEnemyLength + maxLevelLength);
     const cameraBuffer = createCameraUniformBuffer(device);
     const indexBuffer = createIndexBuffer(device);
     const uvBuffer = createUVBuffer(device);

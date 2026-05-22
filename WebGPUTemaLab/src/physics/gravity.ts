@@ -1,8 +1,9 @@
 import { easyLevel, mediumLevel, hardLevel } from '../level/level';
 import { getBoundingBox, checkAABBCollision, calculateOverlap } from './collision';
 import { isGameOver, gameStarted } from '../game/gameState';
-import { enemies } from '../game/enemy';
+import { easyLevelEnemies, mediumLevelEnemies, hardLevelEnemies } from '../game/enemy';
 import type { Player } from '../game/player';
+import type { Enemy } from '../game/enemy';
 import { currentLevel } from '../game/gameState';
 
 const GRAVITY = -0.000195;
@@ -106,6 +107,13 @@ export function updatePhysics(
   }
 
   const playerBox = getBoundingBox(player);
+
+  let enemies: Enemy[] = [];
+
+  if(currentLevel === 1) enemies = easyLevelEnemies;
+  if(currentLevel === 2) enemies = mediumLevelEnemies;
+  if(currentLevel === 3) enemies = hardLevelEnemies;
+
   enemies.forEach((x) => {
     const platformBox = getBoundingBox(x);
     if (checkAABBCollision(playerBox, platformBox)) {
