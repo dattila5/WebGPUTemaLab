@@ -1,7 +1,6 @@
 struct ObjectData {
     position: vec4<f32>,
     object_type: f32,
-    shape_type: f32,
 };
 
 struct CameraData {
@@ -39,7 +38,7 @@ fn main(
             vec2<f32>( 0.5, -0.5)
         );
         vertex = pos[vertex_index];
-        uv = pos[vertex_index] + vec2<f32>(0.5, 0.5);
+        uv = pos[vertex_index] + vec2<f32>(0.5);
     } else {
         var pos = array<vec2<f32>, 4>(
             vec2<f32>(-0.5, -0.5),

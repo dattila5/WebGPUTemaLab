@@ -1,5 +1,6 @@
 import type { GameObject } from '../core/gameObject';
 
+// ket haromszog vertex indexei
 export function createIndexBuffer(device: GPUDevice): GPUBuffer {
   const indices = new Uint32Array([0, 1, 2, 2, 3, 0]);
 
@@ -15,26 +16,7 @@ export function createIndexBuffer(device: GPUDevice): GPUBuffer {
   return buffer;
 }
 
-export function createUVBuffer(device: GPUDevice): GPUBuffer {
-  const uvCoords = new Float32Array([
-    0.0, 1.0,
-    1.0, 1.0,
-    1.0, 0.0,
-    0.0, 0.0,
-  ]);
-
-  const buffer = device.createBuffer({
-    size: uvCoords.byteLength,
-    usage: GPUBufferUsage.VERTEX | GPUBufferUsage.COPY_DST,
-    mappedAtCreation: true,
-  });
-
-  new Float32Array(buffer.getMappedRange()).set(uvCoords);
-  buffer.unmap();
-
-  return buffer;
-}
-
+// pozicio, meret, tipus tarolasa
 export function createPositionBuffer(device: GPUDevice, objectCount: number): GPUBuffer {
   const bufferSize = objectCount * 32;
 
@@ -45,6 +27,7 @@ export function createPositionBuffer(device: GPUDevice, objectCount: number): GP
   });
 }
 
+// kepet letolti, gpu texturava alakitja
 export async function loadTexture(device: GPUDevice, imagePath: string): Promise<GPUTexture> {
   const response = await fetch(imagePath);
   const blob = await response.blob();
@@ -65,6 +48,7 @@ export async function loadTexture(device: GPUDevice, imagePath: string): Promise
   return texture;
 }
 
+// textura szuro
 export function createTextureSampler(device: GPUDevice): GPUSampler {
   return device.createSampler({
     magFilter: 'nearest',
@@ -74,6 +58,7 @@ export function createTextureSampler(device: GPUDevice): GPUSampler {
   });
 }
 
+// shaderrel osszekoti az adatokat
 export function createPositionBindGroup(
   device: GPUDevice,
   pipeline: GPURenderPipeline,
@@ -105,6 +90,7 @@ export function createPositionBindGroup(
   });
 }
 
+// adatok gpu-ba irasa
 export function updateObjectBuffer(
   device: GPUDevice,
   buffer: GPUBuffer,
@@ -136,6 +122,7 @@ export function updateObjectBuffer(
   device.queue.writeBuffer(buffer, 0, data);
 }
 
+// kamera poziciot tarol
 export function createCameraUniformBuffer(device: GPUDevice): GPUBuffer {
   return device.createBuffer({
     size: 16,
@@ -144,6 +131,7 @@ export function createCameraUniformBuffer(device: GPUDevice): GPUBuffer {
   });
 }
 
+// frissiti a kamera buffert az aktualis poziciokkal
 export function updateCameraUniformBuffer(
   device: GPUDevice,
   buffer: GPUBuffer,

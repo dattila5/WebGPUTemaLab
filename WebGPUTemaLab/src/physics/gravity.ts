@@ -1,5 +1,5 @@
 import { easyLevel, mediumLevel, hardLevel } from '../level/level';
-import { getBoundingBox, checkAABBCollision, calculateOverlap } from './collision';
+import { getBoundingBox, checkAABBCollision, getMinSide } from './collision';
 import { isGameOver, gameStarted } from '../game/gameState';
 import { easyLevelEnemies, mediumLevelEnemies, hardLevelEnemies } from '../game/enemy';
 import type { Player } from '../game/player';
@@ -61,28 +61,7 @@ export function updatePhysics(
       continue;
     }
 
-    const overlap = calculateOverlap(playerBox, platformBox);
-
-    const absTop = Math.abs(overlap.top);
-    const absBottom = Math.abs(overlap.bottom);
-    const absLeft = Math.abs(overlap.left);
-    const absRight = Math.abs(overlap.right);
-
-    let min = absTop;
-    let side: 'top' | 'bottom' | 'left' | 'right' = 'top';
-
-    if (absBottom < min) {
-      min = absBottom;
-      side = 'bottom';
-    }
-    if (absLeft < min) {
-      min = absLeft;
-      side = 'left';
-    }
-    if (absRight < min) {
-      min = absRight;
-      side = 'right';
-    }
+    const side = getMinSide(playerBox, platformBox);
 
     switch (side) {
       case 'top':

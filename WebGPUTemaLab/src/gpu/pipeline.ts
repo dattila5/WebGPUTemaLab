@@ -35,9 +35,7 @@ export function createRenderPipeline(
       {
         binding: 3,
         visibility: GPUShaderStage.FRAGMENT,
-        sampler: {
-          type: 'filtering',
-        },
+        sampler: { type: 'filtering' },
       },
     ],
   });
@@ -50,19 +48,7 @@ export function createRenderPipeline(
     layout: pipelineLayout,
     vertex: {
       module: vertexShaderModule,
-      entryPoint: 'main',
-      buffers: [
-        {
-          arrayStride: 8,
-          attributes: [
-            {
-              shaderLocation: 0,
-              offset: 0,
-              format: 'float32x2',
-            },
-          ],
-        },
-      ],
+      entryPoint: 'main'
     },
     fragment: {
       module: fragmentShaderModule,

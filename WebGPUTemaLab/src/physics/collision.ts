@@ -25,11 +25,38 @@ export function checkAABBCollision(box1: BoundingBox, box2: BoundingBox): boolea
   );
 }
 
-export function calculateOverlap(playerBox: BoundingBox, platformBox: BoundingBox) {
+function calculateOverlap(playerBox: BoundingBox, platformBox: BoundingBox) {
   return {
     top: playerBox.bottom - platformBox.top,
     bottom: playerBox.top - platformBox.bottom,
     left: playerBox.right - platformBox.left,
     right: playerBox.left - platformBox.right,
   };
+}
+
+export function getMinSide(playerBox: BoundingBox, platformBox: BoundingBox){
+    const overlap = calculateOverlap(playerBox, platformBox);
+
+    const absTop = Math.abs(overlap.top);
+    const absBottom = Math.abs(overlap.bottom);
+    const absLeft = Math.abs(overlap.left);
+    const absRight = Math.abs(overlap.right);
+
+    let min = absTop;
+    let side: 'top' | 'bottom' | 'left' | 'right' = 'top';
+
+    if (absBottom < min) {
+      min = absBottom;
+      side = 'bottom';
+    }
+    if (absLeft < min) {
+      min = absLeft;
+      side = 'left';
+    }
+    if (absRight < min) {
+      min = absRight;
+      side = 'right';
+    }
+
+    return side;
 }
