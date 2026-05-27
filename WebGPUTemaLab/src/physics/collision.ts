@@ -1,5 +1,3 @@
-import { GameObject } from '../core/gameObject';
-
 export interface BoundingBox {
   top: number;
   bottom: number;
@@ -8,15 +6,6 @@ export interface BoundingBox {
 }
 
 export class CollisionDetector {
-  static getBoundingBox(obj: GameObject, spikeNum: number = 1): BoundingBox {
-    return {
-      top: obj.y + (obj.height / 2) / spikeNum,
-      bottom: obj.y - (obj.height / 2) / spikeNum,
-      left: obj.x - (obj.width / 2) / spikeNum,
-      right: obj.x + (obj.width / 2) / spikeNum,
-    };
-  }
-
   static checkAABBCollision(box1: BoundingBox, box2: BoundingBox): boolean {
     return (
       box1.right > box2.left &&

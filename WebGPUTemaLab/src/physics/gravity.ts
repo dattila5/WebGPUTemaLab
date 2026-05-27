@@ -50,7 +50,7 @@ export class PhysicsEngine {
   }
 
   private static checkPlatformCollisions(player: Player, platforms: Platform[]): void {
-    const playerBox = CollisionDetector.getBoundingBox(player);
+    const playerBox = player.getBoundingBox(1);
 
     for (const platform of platforms) {
       if (platform.type === 'background') continue;
@@ -58,9 +58,9 @@ export class PhysicsEngine {
       let platformBox: BoundingBox;
 
       if (platform.type === 'spike') {
-        platformBox = CollisionDetector.getBoundingBox(platform, 2);
+        platformBox = platform.getBoundingBox(2);
       } else {
-        platformBox = CollisionDetector.getBoundingBox(platform);
+        platformBox = platform.getBoundingBox(1);
       }
 
       if (!CollisionDetector.checkAABBCollision(playerBox, platformBox)) continue;
@@ -96,10 +96,10 @@ export class PhysicsEngine {
   }
 
   private static checkEnemyCollisions(player: Player, enemies: Enemy[]): void {
-    const playerBox = CollisionDetector.getBoundingBox(player);
+    const playerBox = player.getBoundingBox(1);
 
     enemies.forEach((enemy) => {
-      const enemyBox = CollisionDetector.getBoundingBox(enemy);
+      const enemyBox = enemy.getBoundingBox(1);
       if (CollisionDetector.checkAABBCollision(playerBox, enemyBox)) {
         this.didPlayerTouchEnemy = true;
       }
