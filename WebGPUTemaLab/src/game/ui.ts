@@ -1,41 +1,60 @@
-import { startGame, nextLevel, currentLevel } from '../game/gameState';
+import { GameState } from './gameState';
 
-const screenButtons = [
-  { buttonId: 'continueBtn', screenId: 'winScreen', action: nextLevel },
-  { buttonId: 'tryAgainAfterWinBtn', screenId: 'winScreen', action: startGame },
-  { buttonId: 'tryAgainBtn', screenId: 'loseScreen', action: startGame },
-  { buttonId: 'startBtn', screenId: 'startScreen', action: startGame },
-];
+export class UIManager {
+  private static screenButtons = [
+    { buttonId: 'continueBtn', screenId: 'winScreen', action: () => GameState.nextLevel() },
+    { buttonId: 'tryAgainAfterWinBtn', screenId: 'winScreen', action: () => GameState.startGame() },
+    { buttonId: 'tryAgainBtn', screenId: 'loseScreen', action: () => GameState.startGame() },
+    { buttonId: 'startBtn', screenId: 'startScreen', action: () => GameState.startGame() },
+  ];
 
-export function setScreenVisible(screenId: string): void{
-  const screen = document.getElementById(screenId);
-  if (screen) screen.classList.remove('hidden');
-}
+  static initialize(): void {
+    this.attachButtonListeners();
+  }
 
-export function showLoseScreen(): void {
-  setScreenVisible('loseScreen')
-}
+  static setScreenVisible(screenId: string): void {
+    const screen = document.getElementById(screenId);
+    if (screen) screen.classList.remove('hidden');
+  }
 
-export function showWinScreen(): void {
-  setScreenVisible('winScreen')
-}
-
-export function showStartScreen(): void{
-  setScreenVisible('startScreen');
-}
-
-export function changeButtonTextIfNeeded(): void{
-  const btn = document.getElementById('continueBtn');
-  if(btn == null) return;
-
-  if(currentLevel == 3) btn.textContent = "End Game";
-  else btn.textContent = "Continue";
-}
-
-screenButtons.forEach(({ buttonId, screenId, action }) => {
-  document.getElementById(buttonId)?.addEventListener('click', () => {
+  static setScreenHidden(screenId: string): void {
     const screen = document.getElementById(screenId);
     if (screen) screen.classList.add('hidden');
-    action();
-  });
-});
+  }
+
+  static showLoseScreen(): void {
+    this.setScreenVisible('loseScreen');
+  }
+
+  static showWinScreen(): void {
+    this.setScreenVisible('winScreen');
+    this.changeButtonTextIfNeeded();
+  }
+
+  static showStartScreen(): void {
+    this.setScreenVisible('startScreen');
+  }
+
+  private static changeButtonTextIfNeeded(): void {
+    const btn = document.getElementById('continueBtn');
+    if (!btn) return;
+
+    if (GameState.currentLevel === 3) {
+      btn.textContent = 'End Game';
+    } else {
+      btn.textContent = 'Continue';
+    }
+  }
+
+  private static attachButtonListeners(): void {
+    this.screenButtons.forEach(({ buttonId, screenId, action }) => {
+      const button = document.getElementById(buttonId);
+      if (!button) return;
+
+      button.addEventListener('click', () => {
+        this.setScreenHidden(screenId);
+        action();
+      });
+    });
+  }
+}

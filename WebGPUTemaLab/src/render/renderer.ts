@@ -1,11 +1,7 @@
-import { easyLevel, mediumLevel, hardLevel } from '../level/level';
 import { updateObjectBuffer, updateCameraUniformBuffer } from '../gpu/buffer';
-import { player } from '../game/player';
-import { easyLevelEnemies, mediumLevelEnemies, hardLevelEnemies } from '../game/enemy';
-import { smoothCameraX, smoothOffset } from '../game/camera';
-import type { GameObject } from '../core/gameObject';
-import { gameUpdate } from '../game/gameUpdate';
-import { currentLevel } from '../game/gameState';
+import { GameState } from '../game/gameState';
+import { LevelManager } from '../game/levelManager';
+import { Background } from '../core/background';
 
 export function renderFrame(
   device: GPUDevice,
@@ -16,30 +12,12 @@ export function renderFrame(
   indexBuffer: GPUBuffer,
   bindGroup: GPUBindGroup
 ) {
-  gameUpdate();
-  const backgroundObject: GameObject = { x: 0, y: 0, width: 17, height: 2, type: 'background' };
+  const backgroundObject = new Background();
+  const platformObjects = LevelManager.getPlatforms();
 
-  const getLevelObjects = () => {
-    switch(currentLevel) {
-      case 1: return easyLevel;
-      case 2: return mediumLevel;
-      case 3: return hardLevel;
-      default: return easyLevel;
-    }
-  };
-
-  const getEnemyObjects = () =>{
-    switch(currentLevel){
-      case 1: return easyLevelEnemies;
-      case 2: return mediumLevelEnemies;
-      case 3: return hardLevelEnemies;
-      default: return easyLevelEnemies;
-    }
-  }
-
-  const allObjects = [backgroundObject, player, ...getEnemyObjects(), ...getLevelObjects()];
+  const allObjects = [backgroundObject, GameState.player, ...GameState.enemies, ...platformObjects];
   updateObjectBuffer(device, positionBuffer, allObjects);
-  updateCameraUniformBuffer(device, cameraBuffer, smoothCameraX, smoothOffset);
+  updateCameraUniformBuffer(device, cameraBuffer, GameState.camera.x, GameState.camera.offset);
 
   const encoder = device.createCommandEncoder();
   const pass = encoder.beginRenderPass({
@@ -59,5 +37,5 @@ export function renderFrame(
 
   pass.end();
   const commandBuffer = encoder.finish();
-  device.queue.submit([commandBuffer]); 
+  device.queue.submit([commandBuffer]);
 }

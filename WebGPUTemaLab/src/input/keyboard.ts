@@ -1,23 +1,40 @@
-let squarePosition = { x: 0.0, y: 0.0 };
+export class InputManager {
+  private static keysPressed: Record<string, boolean> = {
+    a: false,
+    d: false,
+    ' ': false,
+  };
 
-const keysPressed = {
-  a: false,
-  d: false,
-  ' ': false,
-};
+  static initialize(): void {
+    window.addEventListener('keydown', (e) => this.handleKeyDown(e));
+    window.addEventListener('keyup', (e) => this.handleKeyUp(e));
+  }
 
-function initKeyboardInput() {
-  window.addEventListener('keydown', (e) => {
-    if (e.key in keysPressed) {
-      keysPressed[e.key as keyof typeof keysPressed] = true;
+  private static handleKeyDown(e: KeyboardEvent): void {
+    if (e.key in this.keysPressed) {
+      this.keysPressed[e.key] = true;
     }
-  });
+  }
 
-  window.addEventListener('keyup', (e) => {
-    if (e.key in keysPressed) {
-      keysPressed[e.key as keyof typeof keysPressed] = false;
+  private static handleKeyUp(e: KeyboardEvent): void {
+    if (e.key in this.keysPressed) {
+      this.keysPressed[e.key] = false;
     }
-  });
+  }
+
+  static getKeysPressed(): Record<string, boolean> {
+    return { ...this.keysPressed };
+  }
+
+  static isKeyPressed(key: string): boolean {
+    return this.keysPressed[key] ?? false;
+  }
+
+  static reset(): void {
+    this.keysPressed = {
+      a: false,
+      d: false,
+      ' ': false,
+    };
+  }
 }
-
-export { squarePosition, keysPressed, initKeyboardInput };

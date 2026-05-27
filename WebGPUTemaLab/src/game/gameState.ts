@@ -1,60 +1,73 @@
-import { player } from '../game/player';
-import { showLoseScreen, showWinScreen, showStartScreen } from '../game/ui'
-import { didPlayerTouchSpike, didPlayerTouchEnemy } from '../physics/gravity'
+import { Player } from '../core/player';
+import { Enemy } from '../core/enemy';
+import { Camera } from './camera';
+import { PhysicsEngine } from '../physics/gravity';
+import { LevelManager } from './levelManager'
+import { UIManager } from './ui'
 
-export let isGameOver = false;
-export let gameStarted = false;
-export let currentLevel = 1;
+export class GameState {
+  private static instance: GameState;
+  static isGameOver = false;
+  static gameStarted = false;
+  static currentLevel = 1;
+  static player: Player;
+  static enemies: Enemy[] = [];
+  static camera: Camera = new Camera();
 
-export function nextLevel(): void {
-  if (currentLevel < 3) {
-    currentLevel++;
-    startGame();
+  private constructor() { }
+
+  static getInstance(): GameState {
+    if (!GameState.instance) {
+      GameState.instance = new GameState();
+    }
+    return GameState.instance;
   }
-  else {
-    currentLevel = 1;
-    gameReset();
+
+  static initializeGameObjects(): void {
+    GameState.player = new Player(-0.9, -0.52);
+    GameState.enemies = [];
   }
-}
 
-export function didPlayerDied(): void {
-  if (player.y <= -1.1 || didPlayerTouchSpike || didPlayerTouchEnemy) {
-    showLoseScreen();
-    gameOver();
+  static nextLevel(): void {
+    if (GameState.currentLevel < 3) {
+      GameState.currentLevel++;
+      LevelManager.loadLevel();
+      GameState.startGame();
+    } else {
+      GameState.currentLevel = 1;
+      LevelManager.loadLevel();
+      GameState.gameReset();
+    }
   }
-}
 
-export function gameOver(): void {
-  isGameOver = true;
-}
-
-export function didPlayerWin(): void {
-  if (player.x >= 7.5) {
-    showWinScreen();
-    gameOver();
+  static startGame(): void {
+    GameState.player.reset();
+    GameState.camera.reset();
+    GameState.isGameOver = false;
+    GameState.gameStarted = true;
   }
-}
 
-export function startGame(): void {
-  player.x = -0.9;
-  player.y = -0.52;
-  isGameOver = false;
-  gameStarted = true;
-}
+  static gameOver(): void {
+    GameState.isGameOver = true;
+  }
 
-export function gameReset(): void{
-  player.x = -0.9;
-  player.y = -0.52;
-  isGameOver = true;
-  gameStarted = false;
-  showStartScreen();
-}
+  static gameReset(): void {
+    GameState.player.reset();
+    GameState.isGameOver = true;
+    GameState.gameStarted = false;
+    GameState.camera.reset();
+    UIManager.showStartScreen();
+  }
 
-export function isPlayerOutOfMap(): void {
-  if (player.x <= -1.04) player.x = -1.04;
-  if (player.x >= 7.7) player.x = 7.7;
-}
+  static didPlayerWin(): boolean {
+    return GameState.player.x >= 7.5;
+  }
 
-export function setGameOver(state: boolean): void {
-  isGameOver = state;
+  static didPlayerDie(): boolean {
+    return (
+      GameState.player.y <= -1.1 ||
+      PhysicsEngine.getDidPlayerTouchSpike() ||
+      PhysicsEngine.getDidPlayerTouchEnemy()
+    );
+  }
 }
