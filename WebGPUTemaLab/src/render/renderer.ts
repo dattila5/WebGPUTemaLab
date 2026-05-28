@@ -3,40 +3,56 @@ import { GameState } from '../game/gameState';
 import { LevelManager } from '../game/levelManager';
 import { Background } from '../core/background';
 
-export function renderFrame(
-  device: GPUDevice,
-  context: GPUCanvasContext,
-  pipeline: GPURenderPipeline,
-  positionBuffer: GPUBuffer,
-  cameraBuffer: GPUBuffer,
-  indexBuffer: GPUBuffer,
-  bindGroup: GPUBindGroup,
-  gpuBufferManager: GPUBufferManager
-) {
-  const backgroundObject = new Background();
-  const platformObjects = LevelManager.getPlatforms();
+export class Renderer {
+  private device: GPUDevice;
+  private context: GPUCanvasContext;
+  private pipeline: GPURenderPipeline;
+  private bufferManager: GPUBufferManager;
 
-  const allObjects = [backgroundObject, GameState.player, ...GameState.enemies, ...platformObjects];
-  gpuBufferManager.updateObjectBuffer(positionBuffer, allObjects);
-  gpuBufferManager.updateCameraUniformBuffer(cameraBuffer, GameState.camera.x, GameState.camera.offset);
+  constructor(
+    device: GPUDevice,
+    context: GPUCanvasContext,
+    pipeline: GPURenderPipeline,
+    bufferManager: GPUBufferManager
+  ) {
+    this.device = device;
+    this.context = context;
+    this.pipeline = pipeline;
+    this.bufferManager = bufferManager;
+  }
 
-  const encoder = device.createCommandEncoder();
-  const pass = encoder.beginRenderPass({
-    colorAttachments: [
-      {
-        view: context.getCurrentTexture().createView(),
-        loadOp: 'clear',
-        storeOp: 'store',
-      },
-    ],
-  });
+  renderFrame(
+    positionBuffer: GPUBuffer,
+    cameraBuffer: GPUBuffer,
+    indexBuffer: GPUBuffer,
+    bindGroup: GPUBindGroup
+  ): void {
+    const backgroundObject = new Background();
+    const platformObjects = LevelManager.getPlatforms();
 
-  pass.setPipeline(pipeline);
-  pass.setBindGroup(0, bindGroup);
-  pass.setIndexBuffer(indexBuffer, 'uint32');
-  pass.drawIndexed(6, allObjects.length, 0, 0, 0);
+    const allObjects = [backgroundObject, GameState.player, ...GameState.enemies, ...platformObjects];
 
-  pass.end();
-  const commandBuffer = encoder.finish();
-  device.queue.submit([commandBuffer]);
+    this.bufferManager.updateObjectBuffer(positionBuffer, allObjects);
+    this.bufferManager.updateCameraUniformBuffer(cameraBuffer, GameState.camera.x, GameState.camera.offset);
+
+    const encoder = this.device.createCommandEncoder();
+    const pass = encoder.beginRenderPass({
+      colorAttachments: [
+        {
+          view: this.context.getCurrentTexture().createView(),
+          loadOp: 'clear',
+          storeOp: 'store',
+        },
+      ],
+    });
+
+    pass.setPipeline(this.pipeline);
+    pass.setBindGroup(0, bindGroup);
+    pass.setIndexBuffer(indexBuffer, 'uint32');
+    pass.drawIndexed(6, allObjects.length, 0, 0, 0);
+
+    pass.end();
+    const commandBuffer = encoder.finish();
+    this.device.queue.submit([commandBuffer]);
+  }
 }

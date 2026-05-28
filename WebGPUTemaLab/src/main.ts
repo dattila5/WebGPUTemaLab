@@ -1,8 +1,8 @@
 import { initWebGPU } from './gpu/init';
-import { createRenderPipeline } from './gpu/pipeline';
+import { GPUPipelineManager } from './gpu/pipeline';
 import { GPUBufferManager } from './gpu/buffer';
 import { GPUTextureManager } from './gpu/texture';
-import { renderFrame } from './render/renderer';
+import { Renderer } from './render/renderer';
 import vertexShaderCode from './shaders/vertex.wgsl?raw';
 import fragmentShaderCode from './shaders/fragment.wgsl?raw';
 import { GameState } from './game/gameState';
@@ -17,7 +17,9 @@ async function main() {
     const { device, context, canvasFormat } = await initWebGPU();
     const bufferManager = new GPUBufferManager(device);
     const textureManager = new GPUTextureManager(device);
-    const pipeline = createRenderPipeline(device, canvasFormat, vertexShaderCode, fragmentShaderCode);
+    const pipelineManager = new GPUPipelineManager(device, canvasFormat, vertexShaderCode, fragmentShaderCode);
+    const pipeline = pipelineManager.getPipeline();
+    const renderer = new Renderer(device, context, pipeline, bufferManager);
     const textures = {
       1: await textureManager.loadTexture('/textures/atlas1.png'),
       2: await textureManager.loadTexture('/textures/atlas2.png'),
@@ -45,7 +47,7 @@ async function main() {
       const newTexture = textures[GameState.currentLevel as 1 | 2 | 3];
       bindGroup = textureManager.createPositionBindGroup(pipeline, positionBuffer, cameraBuffer, newTexture, sampler);
 
-      renderFrame(device, context, pipeline, positionBuffer, cameraBuffer, indexBuffer, bindGroup, bufferManager);
+      renderer.renderFrame(positionBuffer, cameraBuffer, indexBuffer, bindGroup);
       requestAnimationFrame(gameLoop);
     }
 
