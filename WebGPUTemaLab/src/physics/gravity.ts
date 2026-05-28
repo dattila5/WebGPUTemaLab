@@ -12,14 +12,28 @@ export class PhysicsEngine {
   private static didPlayerTouchSpike = false;
   private static didPlayerTouchEnemy = false;
 
+   /**
+   * jatekos tuske utkozes ellenorzese
+   * @returns logikai valtozot, jatekos hozzaert a tuskehez vagy nem
+   */
   static getDidPlayerTouchSpike(): boolean {
     return this.didPlayerTouchSpike;
   }
 
+   /**
+   * jatekos ellenseg utkozes ellenorzese
+   * @returns logikai valtozot, jatekos hozzaert a ellenseghez vagy nem
+   */
   static getDidPlayerTouchEnemy(): boolean {
     return this.didPlayerTouchEnemy;
   }
 
+   /**
+   * fizika frissitese
+   * @param player - jatekos
+   * @param enemies - ellensegek
+   * @param platforms - platformok
+   */
   static update(
     player: Player,
     enemies: Enemy[],
@@ -47,6 +61,11 @@ export class PhysicsEngine {
     this.checkEnemyCollisions(player, enemies);
   }
 
+   /**
+   * jatekos platform utkozes kezelese
+   * @param player - jatekos
+   * @param platforms - platformok
+   */
   private static checkPlatformCollisions(player: Player, platforms: Platform[]): void {
     const playerBox = player.getBoundingBox(1);
 
@@ -93,6 +112,11 @@ export class PhysicsEngine {
     }
   }
 
+   /**
+   * jatekos ellenfel utkozes kezelese
+   * @param player - jatekos
+   * @param enemies - ellensegek
+   */
   private static checkEnemyCollisions(player: Player, enemies: Enemy[]): void {
     const playerBox = player.getBoundingBox(1);
 

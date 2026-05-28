@@ -1,10 +1,18 @@
 export class GPUTextureManager {
   private device: GPUDevice;
 
+   /**
+   * @param device - gpu device
+   */
   constructor(device: GPUDevice) {
     this.device = device;
   }
 
+    /**
+   * atlas kep gpu texturava alakitasa
+   * @param imagePath - az atlasnak az eleresi utja
+   * @returns gpu texturat
+   */
   async loadTexture(imagePath: string): Promise<GPUTexture> {
     const response = await fetch(imagePath);
     const blob = await response.blob();
@@ -24,6 +32,10 @@ export class GPUTextureManager {
     return texture;
   }
 
+    /**
+   * texturanak szuro create
+   * @returns gpu szurot
+   */
   createTextureSampler(): GPUSampler {
     return this.device.createSampler({
       magFilter: 'nearest',
@@ -33,6 +45,15 @@ export class GPUTextureManager {
     });
   }
 
+   /**
+   * bindgroup create. shaderrel osszekapcsolas
+   * @param pipeline - render pipeline
+   * @param positionBuffer - position buffer
+   * @param cameraBuffer - camera uniform buffer
+   * @param texture - textura
+   * @param sampler - texuraszuro
+   * @returns bindgroupot
+   */
   createPositionBindGroup(
     pipeline: GPURenderPipeline,
     positionBuffer: GPUBuffer,

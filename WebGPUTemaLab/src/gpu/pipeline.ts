@@ -2,6 +2,12 @@ export class GPUPipelineManager {
   private device: GPUDevice;
   private pipeline: GPURenderPipeline;
 
+   /**
+   * @param device - gpu device
+   * @param canvasFormat - canvas formatuma
+   * @param vertexShaderCode - vertex wgsl kodja
+   * @param fragmentShaderCode - fragment wgsl kodja
+   */
   constructor(
     device: GPUDevice,
     canvasFormat: GPUTextureFormat,
@@ -12,6 +18,12 @@ export class GPUPipelineManager {
     this.pipeline = this.createRenderPipeline(canvasFormat, vertexShaderCode, fragmentShaderCode);
   }
 
+   /**
+   * @param canvasFormat - canvas formatuma
+   * @param vertexShaderCode - vertex wgsl kodja
+   * @param fragmentShaderCode - fragment wgsl kodja
+   * @returns render pipelinet
+   */
   private createRenderPipeline(
     canvasFormat: GPUTextureFormat,
     vertexShaderCode: string,
@@ -74,6 +86,10 @@ export class GPUPipelineManager {
     });
   }
 
+   /**
+   * pipeline lekerese
+   * @returns render pipelinet
+   */
   getPipeline(): GPURenderPipeline {
     return this.pipeline;
   }

@@ -3,10 +3,17 @@ import type { GameObject } from '../core/gameObject';
 export class GPUBufferManager {
   private device: GPUDevice;
 
+    /**
+   * @param device - gpu device
+   */
   constructor(device: GPUDevice) {
     this.device = device;
   }
 
+   /**
+   * index buffer create. a ket haromszog vertexeit adja vissza
+   * @returns magat az index buffert
+   */
   createIndexBuffer(): GPUBuffer {
     const indices = new Uint32Array([0, 1, 2, 2, 3, 0]);
 
@@ -22,6 +29,11 @@ export class GPUBufferManager {
     return buffer;
   }
 
+   /**
+   * position buffer create. pozicio, meret, tipus tarolasa
+   * @param objectCount - hany darab objektum van
+   * @returns magat a position buffert
+   */
   createPositionBuffer(objectCount: number): GPUBuffer {
     const bufferSize = objectCount * 32;
 
@@ -32,6 +44,10 @@ export class GPUBufferManager {
     });
   }
 
+   /**
+   * camera unifrom buffer create
+   * @returns magat a camera unfirom buffert
+   */
   createCameraUniformBuffer(): GPUBuffer {
     return this.device.createBuffer({
       size: 16,
@@ -40,6 +56,11 @@ export class GPUBufferManager {
     });
   }
 
+   /**
+   * gpu bufferbe az adatok irasa
+   * @param buffer - a buffer amibe irjuk
+   * @param objects - az osszes objektum
+   */
   updateObjectBuffer(buffer: GPUBuffer, objects: GameObject[]): void {
     const data = new Float32Array(objects.length * 8);
 
@@ -67,6 +88,12 @@ export class GPUBufferManager {
     this.device.queue.writeBuffer(buffer, 0, data);
   }
 
+   /**
+   * a camera buffer frissitese az aktualis pozival
+   * @param buffer - a camera buffer amit frissitunk
+   * @param cameraX - cam x pozija
+   * @param offset - cam y offsetje
+   */
   updateCameraUniformBuffer(buffer: GPUBuffer, cameraX: number, offset: number): void {
     const data = new Float32Array([cameraX, offset, 0, 0]);
     this.device.queue.writeBuffer(buffer, 0, data);

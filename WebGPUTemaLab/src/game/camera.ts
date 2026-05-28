@@ -7,14 +7,26 @@ export class Camera {
   private readonly cameraLerpSpeed: number = 0.01;
   private readonly offsetLerpSpeed: number = 0.008;
 
+   /**
+   * kamera x pozicio visszadasa
+   * @returns x pozit
+   */
   get x(): number {
     return this.smoothCameraX;
   }
 
+   /**
+   * kamera y offset visszadasa
+   * @returns y offsetet
+   */
   get offset(): number {
     return this.smoothOffset;
   }
 
+   /**
+   * kamera frissitese. jatekos kovetes
+   * @param playerX - jatekos x pozija
+   */
   update(playerX: number): void {
     let targetCameraX: number;
     let targetOffset: number;
@@ -34,6 +46,9 @@ export class Camera {
     this.smoothOffset += (targetOffset - this.smoothOffset) * this.offsetLerpSpeed;
   }
 
+   /**
+   * kamera full reset
+   */
   reset(): void {
     this.smoothCameraX = -0.9;
     this.smoothOffset = 0.85;

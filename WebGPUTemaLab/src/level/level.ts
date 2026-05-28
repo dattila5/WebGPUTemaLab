@@ -1,5 +1,8 @@
 import { Platform } from '../core/platform';
 
+ /**
+ * elso map
+ */
 export const easyLevel: Platform[] = [
   new Platform(-0.9, -0.65, 1.7, 0.1, 'platform_grass'),
   new Platform(-0.9, -0.875, 1.7, 0.35, 'platform_dirt'),
@@ -36,6 +39,9 @@ export const easyLevel: Platform[] = [
   new Platform(7.3, -0.55, 0.1, 0.1, 'flag'),
 ];
 
+ /**
+ * masodik map
+ */
 export const mediumLevel: Platform[] = [
   new Platform(-0.9, -0.65, 1.7, 0.1, 'platform_grass'),
   new Platform(-0.9, -0.875, 1.7, 0.35, 'platform_dirt'),
@@ -87,6 +93,9 @@ export const mediumLevel: Platform[] = [
   new Platform(7.3, -0.55, 0.1, 0.1, 'flag'),
 ];
 
+ /**
+ * harmadik map
+ */
 export const hardLevel: Platform[] = [
   new Platform(-0.9, -0.65, 1.2, 0.1, 'platform_grass'),
   new Platform(-0.9, -0.875, 1.2, 0.35, 'platform_dirt'),

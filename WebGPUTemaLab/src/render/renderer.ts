@@ -9,6 +9,13 @@ export class Renderer {
   private pipeline: GPURenderPipeline;
   private bufferManager: GPUBufferManager;
 
+   /**
+   * renderer konstruktora
+   * @param device - gpu eszkoz
+   * @param context - rendereles cel
+   * @param pipeline - pipeline
+   * @param bufferManager - buffer menedzselo
+   */
   constructor(
     device: GPUDevice,
     context: GPUCanvasContext,
@@ -21,6 +28,13 @@ export class Renderer {
     this.bufferManager = bufferManager;
   }
 
+   /**
+   * egy frame renderelese
+   * @param positionBuffer - pozicio buffer
+   * @param cameraBuffer - kamera buffer
+   * @param indexBuffer - index buffer
+   * @param bindGroup - bindgroup
+   */
   renderFrame(
     positionBuffer: GPUBuffer,
     cameraBuffer: GPUBuffer,

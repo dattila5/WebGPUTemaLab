@@ -17,6 +17,10 @@ export class LevelManager {
     3: hardLevelEnemies,
   };
 
+   /**
+   * leghosszabb ellenfel listanak a szamat adja vissza
+   * @returns leghosszabb ellenfel lista szamaval
+   */
   static getMaxEnemyLength(): number {
     return Math.max(
       this.enemiesByLevel[1].length,
@@ -25,6 +29,10 @@ export class LevelManager {
     );
   }
 
+   /**
+   * leghosszabb platform listanak a szamat adja vissza
+   * @returns leghosszabb platfrom lista szamaval
+   */
   static getMaxPlatformLength(): number {
     return Math.max(
       this.platformsByLevel[1].length,
@@ -33,16 +41,27 @@ export class LevelManager {
     );
   }
 
+   /**
+   * platformok lekerese
+   * @returns aktualis szint platformjai
+   */
   static getPlatforms(): Platform[] {
     const levelNum = GameState.currentLevel as 1 | 2 | 3;
     return this.platformsByLevel[levelNum] || [];
   }
 
+   /**
+   * ellenfelek lekerese
+   * @returns aktualis szint ellenfelei
+   */
   static getEnemies(): Enemy[] {
     const levelNum = GameState.currentLevel as 1 | 2 | 3;
     return this.enemiesByLevel[levelNum] || [];
   }
 
+   /**
+   * palya betoltese. enemyk lekerese
+   */
   static loadLevel(): void {
     GameState.enemies = this.getEnemies();
   }

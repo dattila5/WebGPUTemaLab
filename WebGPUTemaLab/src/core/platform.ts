@@ -1,6 +1,15 @@
 import { GameObject } from './gameObject';
 
 export class Platform extends GameObject {
+
+   /**
+   * platform konstruktor
+   * @param x - x pozi
+   * @param y - y pozi
+   * @param width - szelesseg
+   * @param height - magassag
+   * @param type - tipus
+   */
   constructor(
     x: number,
     y: number,
@@ -11,6 +20,9 @@ export class Platform extends GameObject {
     super(x, y, width, height, type);
   }
 
+   /**
+   * mozgas frissito metod. platformnal nem csinal semmit, mert az nem mozog
+   */
   update(): void {
   }
 }

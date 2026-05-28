@@ -5,6 +5,9 @@ import { InputManager } from '../input/keyboard';
 import { PhysicsEngine } from '../physics/gravity';
 
 export class GameManager {
+   /**
+   * jatek frissitese. framenkenti logika
+   */
   static update(): void {
     const keysPressed = InputManager.getKeysPressed();
 

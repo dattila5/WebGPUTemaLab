@@ -6,6 +6,13 @@ export interface BoundingBox {
 }
 
 export class CollisionDetector {
+
+   /**
+   * aabb collision megallapitasa
+   * @param box1 - elso objektum doboza
+   * @param box2 - masodik objektum doboza
+   * @returns logikai valtozot, van-e utkozes vagy nincs
+   */
   static checkAABBCollision(box1: BoundingBox, box2: BoundingBox): boolean {
     return (
       box1.right > box2.left &&
@@ -15,6 +22,12 @@ export class CollisionDetector {
     );
   }
 
+   /**
+   * utkozes oldalanak lekerese
+   * @param playerBox - jatekos doboza
+   * @param platformBox - platform doboza
+   * @returns az utkozes oldalat
+   */
   static getCollisionSide(playerBox: BoundingBox, platformBox: BoundingBox): 'top' | 'bottom' | 'left' | 'right' {
     const overlap = this.calculateOverlap(playerBox, platformBox);
 
@@ -42,6 +55,12 @@ export class CollisionDetector {
     return side;
   }
 
+   /**
+   * atfedes mertekenek megallpitasa
+   * @param playerBox - jatekos doboza
+   * @param platformBox - platform doboza
+   * @returns minden oldal atfedesenek a merteke
+   */
   private static calculateOverlap(playerBox: BoundingBox, platformBox: BoundingBox) {
     return {
       top: playerBox.bottom - platformBox.top,
