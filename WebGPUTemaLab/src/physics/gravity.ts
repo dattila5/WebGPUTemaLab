@@ -8,7 +8,6 @@ import { InputManager } from '../input/keyboard';
 
 export class PhysicsEngine {
   private static readonly GRAVITY = -0.00019;
-  private static readonly JUMP_STRENGTH = 0.0115;
 
   private static didPlayerTouchSpike = false;
   private static didPlayerTouchEnemy = false;
@@ -38,8 +37,7 @@ export class PhysicsEngine {
 
     const isJumping = InputManager.isKeyPressed(' ');
     if (isJumping && player.isGrounded) {
-      player.vy = this.JUMP_STRENGTH;
-      player.isGrounded = false;
+      player.jump();
     }
 
     player.y += player.vy;

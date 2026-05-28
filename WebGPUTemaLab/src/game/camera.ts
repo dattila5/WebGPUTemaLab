@@ -4,7 +4,6 @@ export class Camera {
 
   private readonly minCameraX: number = -0.9;
   private readonly maxCameraX: number = 5.85;
-  private readonly playerFollowThreshold: number = 0.15;
   private readonly cameraLerpSpeed: number = 0.01;
   private readonly offsetLerpSpeed: number = 0.008;
 
@@ -20,7 +19,7 @@ export class Camera {
     let targetCameraX: number;
     let targetOffset: number;
 
-    if (playerX < -this.playerFollowThreshold) {
+    if (playerX < -0.15) {
       targetCameraX = this.minCameraX;
       targetOffset = 0.85;
     } else if (playerX > 6.6) {

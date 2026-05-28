@@ -1,4 +1,4 @@
-import { updateObjectBuffer, updateCameraUniformBuffer } from '../gpu/buffer';
+import { GPUBufferManager } from '../gpu/buffer';
 import { GameState } from '../game/gameState';
 import { LevelManager } from '../game/levelManager';
 import { Background } from '../core/background';
@@ -10,14 +10,15 @@ export function renderFrame(
   positionBuffer: GPUBuffer,
   cameraBuffer: GPUBuffer,
   indexBuffer: GPUBuffer,
-  bindGroup: GPUBindGroup
+  bindGroup: GPUBindGroup,
+  gpuBufferManager: GPUBufferManager
 ) {
   const backgroundObject = new Background();
   const platformObjects = LevelManager.getPlatforms();
 
   const allObjects = [backgroundObject, GameState.player, ...GameState.enemies, ...platformObjects];
-  updateObjectBuffer(device, positionBuffer, allObjects);
-  updateCameraUniformBuffer(device, cameraBuffer, GameState.camera.x, GameState.camera.offset);
+  gpuBufferManager.updateObjectBuffer(positionBuffer, allObjects);
+  gpuBufferManager.updateCameraUniformBuffer(cameraBuffer, GameState.camera.x, GameState.camera.offset);
 
   const encoder = device.createCommandEncoder();
   const pass = encoder.beginRenderPass({

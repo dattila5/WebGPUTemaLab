@@ -1,6 +1,7 @@
 import { initWebGPU } from './gpu/init';
 import { createRenderPipeline } from './gpu/pipeline';
-import { createPositionBuffer, createCameraUniformBuffer, createPositionBindGroup, createIndexBuffer, loadTexture, createTextureSampler } from './gpu/buffer';
+import { GPUBufferManager } from './gpu/buffer';
+import { GPUTextureManager } from './gpu/texture';
 import { renderFrame } from './render/renderer';
 import vertexShaderCode from './shaders/vertex.wgsl?raw';
 import fragmentShaderCode from './shaders/fragment.wgsl?raw';
@@ -14,13 +15,15 @@ import { InputManager } from './input/keyboard';
 async function main() {
   try {
     const { device, context, canvasFormat } = await initWebGPU();
+    const bufferManager = new GPUBufferManager(device);
+    const textureManager = new GPUTextureManager(device);
     const pipeline = createRenderPipeline(device, canvasFormat, vertexShaderCode, fragmentShaderCode);
     const textures = {
-      1: await loadTexture(device, '/textures/atlas1.png'),
-      2: await loadTexture(device, '/textures/atlas2.png'),
-      3: await loadTexture(device, '/textures/atlas3.png'),
+      1: await textureManager.loadTexture('/textures/atlas1.png'),
+      2: await textureManager.loadTexture('/textures/atlas2.png'),
+      3: await textureManager.loadTexture('/textures/atlas3.png'),
     };
-    const sampler = createTextureSampler(device);
+    const sampler = textureManager.createTextureSampler();
 
     GameState.getInstance();
     GameState.initializeGameObjects();
@@ -30,19 +33,19 @@ async function main() {
 
     const maxLevelLength = LevelManager.getMaxPlatformLength();
     const maxEnemyLength = LevelManager.getMaxEnemyLength();
-    const positionBuffer = createPositionBuffer(device, 1 + 1 + maxEnemyLength + maxLevelLength);
-    const cameraBuffer = createCameraUniformBuffer(device);
-    const indexBuffer = createIndexBuffer(device);
+    const positionBuffer = bufferManager.createPositionBuffer(1 + 1 + maxEnemyLength + maxLevelLength);
+    const cameraBuffer = bufferManager.createCameraUniformBuffer();
+    const indexBuffer = bufferManager.createIndexBuffer();
 
-    let bindGroup = createPositionBindGroup(device, pipeline, positionBuffer, cameraBuffer, textures[1], sampler);
+    let bindGroup = textureManager.createPositionBindGroup(pipeline, positionBuffer, cameraBuffer, textures[1], sampler);
 
     function gameLoop() {
       GameManager.update();
 
       const newTexture = textures[GameState.currentLevel as 1 | 2 | 3];
-      bindGroup = createPositionBindGroup(device, pipeline, positionBuffer, cameraBuffer, newTexture, sampler);
+      bindGroup = textureManager.createPositionBindGroup(pipeline, positionBuffer, cameraBuffer, newTexture, sampler);
 
-      renderFrame(device, context, pipeline, positionBuffer, cameraBuffer, indexBuffer, bindGroup);
+      renderFrame(device, context, pipeline, positionBuffer, cameraBuffer, indexBuffer, bindGroup, bufferManager);
       requestAnimationFrame(gameLoop);
     }
 
