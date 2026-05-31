@@ -7,7 +7,6 @@ import vertexShaderCode from './shaders/vertex.wgsl?raw';
 import fragmentShaderCode from './shaders/fragment.wgsl?raw';
 import { GameState } from './game/gameState';
 import { LevelManager } from './game/levelManager';
-import { GameManager } from './game/gameManager';
 import { UIManager } from './game/ui';
 import { InputManager } from './input/keyboard';
 
@@ -42,8 +41,6 @@ async function main() {
     let bindGroup = textureManager.createPositionBindGroup(pipeline, positionBuffer, cameraBuffer, textures[1], sampler);
 
     function gameLoop() {
-      GameManager.update();
-
       const newTexture = textures[GameState.currentLevel as 1 | 2 | 3];
       bindGroup = textureManager.createPositionBindGroup(pipeline, positionBuffer, cameraBuffer, newTexture, sampler);
 

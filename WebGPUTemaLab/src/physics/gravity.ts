@@ -98,7 +98,6 @@ export class PhysicsEngine {
 
         case 'bottom':
           player.y = platformBox.bottom - player.height / 2;
-          player.vy = 0;
           break;
 
         case 'left':

@@ -2,6 +2,7 @@ import { GPUBufferManager } from '../gpu/buffer';
 import { GameState } from '../game/gameState';
 import { LevelManager } from '../game/levelManager';
 import { Background } from '../core/background';
+import { GameManager } from '../game/gameManager';
 
 export class Renderer {
   private device: GPUDevice;
@@ -41,6 +42,9 @@ export class Renderer {
     indexBuffer: GPUBuffer,
     bindGroup: GPUBindGroup
   ): void {
+
+    GameManager.update();
+
     const backgroundObject = new Background();
     const platformObjects = LevelManager.getPlatforms();
 
@@ -64,7 +68,6 @@ export class Renderer {
     pass.setBindGroup(0, bindGroup);
     pass.setIndexBuffer(indexBuffer, 'uint32');
     pass.drawIndexed(6, allObjects.length, 0, 0, 0);
-
     pass.end();
     const commandBuffer = encoder.finish();
     this.device.queue.submit([commandBuffer]);
